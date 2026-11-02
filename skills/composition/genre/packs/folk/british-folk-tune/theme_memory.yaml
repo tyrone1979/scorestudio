@@ -1,0 +1,143 @@
+# Learned aggregate motif relations; no corpus melody fragments.
+subs:
+  jig:
+    version: 1
+    enabled: true
+    train_pieces: 304
+    train_ids_sha256: 9e631937c21b8a2f75865a0fd3f56218ab84aad059aeca688c94ec2537321ad9
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 589
+    matched_phrases: 453
+    recall_probability: 0.769100169779287
+    by_phase:
+      last:
+        eligible: 174
+        matched: 131
+        p: 0.7528735632183908
+      middle:
+        eligible: 415
+        matched: 322
+        p: 0.7759036144578313
+    length_counts:
+      '4': 255
+      '6': 52
+      '8': 146
+    lag_counts:
+      '1': 367
+      '2': 65
+      '3': 14
+      '4': 3
+      '5': 3
+      '6': 1
+    transform_counts:
+      approximate: 172
+      repeat: 205
+      transpose: 76
+    duration_median_ql: 3.0
+  reel:
+    version: 1
+    enabled: true
+    train_pieces: 384
+    train_ids_sha256: a30711a31900498a0329629ba1c24e45bb5c18080c321a6596583f7451d79e87
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 698
+    matched_phrases: 557
+    recall_probability: 0.7979942693409742
+    by_phase:
+      last:
+        eligible: 215
+        matched: 184
+        p: 0.8558139534883721
+      middle:
+        eligible: 483
+        matched: 373
+        p: 0.772256728778468
+    length_counts:
+      '4': 317
+      '6': 65
+      '8': 175
+    lag_counts:
+      '1': 431
+      '2': 83
+      '3': 36
+      '4': 5
+      '5': 2
+    transform_counts:
+      approximate: 194
+      repeat: 282
+      transpose: 81
+    duration_median_ql: 4.0
+  hornpipe:
+    version: 1
+    enabled: true
+    train_pieces: 58
+    train_ids_sha256: 68a2c2e60804c0cde96cdfe5f8d46b6dfa0399c878def484611984cad4c1c362
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 76
+    matched_phrases: 63
+    recall_probability: 0.8289473684210527
+    by_phase:
+      last:
+        eligible: 28
+        matched: 23
+        p: 0.8214285714285714
+      middle:
+        eligible: 48
+        matched: 40
+        p: 0.8333333333333334
+    length_counts:
+      '4': 41
+      '6': 11
+      '8': 11
+    lag_counts:
+      '1': 57
+      '2': 4
+      '3': 2
+    transform_counts:
+      approximate: 22
+      repeat: 27
+      transpose: 14
+    duration_median_ql: 2.0
+  waltz:
+    version: 1
+    enabled: true
+    train_pieces: 43
+    train_ids_sha256: bfc2c3d43c790daa5bf26f711c4364494327f70fec160576c6d5b18f532692c4
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 133
+    matched_phrases: 113
+    recall_probability: 0.849624060150376
+    by_phase:
+      last:
+        eligible: 39
+        matched: 38
+        p: 0.9743589743589743
+      middle:
+        eligible: 94
+        matched: 75
+        p: 0.7978723404255319
+    length_counts:
+      '4': 38
+      '6': 10
+      '8': 65
+    lag_counts:
+      '1': 64
+      '2': 28
+      '3': 16
+      '4': 2
+      '5': 1
+      '6': 1
+      '7': 1
+    transform_counts:
+      approximate: 29
+      repeat: 76
+      transpose: 8
+    duration_median_ql: 8.0
+provenance:
+  cache: runs/grammar_cache/folk.json
+  cache_sha256: f260886ff41f4812a203cf3659af24953f29e3acf8f98db55e0452487c44ee05
+  split: exclude is_heldout(id), MD5 modulo 10 == 0

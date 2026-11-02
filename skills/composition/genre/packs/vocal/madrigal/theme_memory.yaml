@@ -1,0 +1,46 @@
+# Learned aggregate motif relations; no corpus melody fragments.
+subs:
+  madrigal:
+    version: 1
+    enabled: true
+    train_pieces: 47
+    train_ids_sha256: 2e7c8890259fd2654fc1d83ae11d5af5570e3e8d31a49ea873a6233f14462d6a
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 409
+    matched_phrases: 293
+    recall_probability: 0.7163814180929096
+    by_phase:
+      last:
+        eligible: 29
+        matched: 22
+        p: 0.7586206896551724
+      middle:
+        eligible: 380
+        matched: 271
+        p: 0.7131578947368421
+    length_counts:
+      '4': 225
+      '6': 37
+      '8': 31
+    lag_counts:
+      '1': 131
+      '2': 80
+      '3': 43
+      '4': 14
+      '5': 10
+      '6': 6
+      '7': 4
+      '8': 2
+      '9': 1
+      '10': 1
+      '11': 1
+    transform_counts:
+      approximate: 165
+      repeat: 55
+      transpose: 73
+    duration_median_ql: 5.0
+provenance:
+  cache: runs/grammar_cache/madrigal.json
+  cache_sha256: 8fee41f63dbcfb92f92b8d43fa1db5753f290b0712f0a33251602e45781bba24
+  split: exclude is_heldout(id), MD5 modulo 10 == 0

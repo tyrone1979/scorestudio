@@ -1,0 +1,168 @@
+# Learned aggregate motif relations; no corpus melody fragments.
+subs:
+  allegro:
+    version: 1
+    enabled: true
+    train_pieces: 193
+    train_ids_sha256: 7318d935f9c35735309681bebb0b3b547eeb32f323e33c3e5e644f05f402828a
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 589
+    matched_phrases: 416
+    recall_probability: 0.7062818336162988
+    by_phase:
+      last:
+        eligible: 122
+        matched: 78
+        p: 0.639344262295082
+      middle:
+        eligible: 467
+        matched: 338
+        p: 0.7237687366167024
+    length_counts:
+      '4': 201
+      '6': 78
+      '8': 137
+    lag_counts:
+      '1': 270
+      '2': 38
+      '3': 35
+      '4': 17
+      '5': 14
+      '6': 6
+      '7': 3
+      '8': 4
+      '9': 5
+      '10': 4
+      '12': 6
+      '13': 5
+      '15': 3
+      '16': 1
+      '17': 1
+      '18': 1
+      '21': 1
+      '22': 2
+    transform_counts:
+      approximate: 150
+      repeat: 102
+      transpose: 164
+    duration_median_ql: 4.0
+  minuet:
+    version: 1
+    enabled: true
+    train_pieces: 220
+    train_ids_sha256: f7d2c2df3e7c1b0c0e98ffa721e6b71f7a12b6533250d2d438156d2db5f40b1e
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 450
+    matched_phrases: 292
+    recall_probability: 0.6488888888888888
+    by_phase:
+      last:
+        eligible: 114
+        matched: 80
+        p: 0.7017543859649122
+      middle:
+        eligible: 336
+        matched: 212
+        p: 0.6309523809523809
+    length_counts:
+      '4': 140
+      '6': 61
+      '8': 91
+    lag_counts:
+      '1': 195
+      '2': 45
+      '3': 21
+      '4': 14
+      '5': 9
+      '6': 5
+      '8': 1
+      '11': 1
+      '13': 1
+    transform_counts:
+      approximate: 97
+      repeat: 104
+      transpose: 91
+    duration_median_ql: 4.0
+  duple:
+    version: 1
+    enabled: true
+    train_pieces: 193
+    train_ids_sha256: 4fe796b48c9adaaa9ea5516d4beb936f140d159a890757ffc56ebad61f790166
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 491
+    matched_phrases: 336
+    recall_probability: 0.6843177189409368
+    by_phase:
+      last:
+        eligible: 139
+        matched: 91
+        p: 0.6546762589928058
+      middle:
+        eligible: 352
+        matched: 245
+        p: 0.6960227272727273
+    length_counts:
+      '4': 192
+      '6': 60
+      '8': 84
+    lag_counts:
+      '1': 215
+      '2': 51
+      '3': 31
+      '4': 12
+      '5': 9
+      '6': 5
+      '7': 3
+      '8': 2
+      '9': 1
+      '10': 2
+      '11': 2
+      '13': 2
+      '15': 1
+    transform_counts:
+      approximate: 119
+      repeat: 114
+      transpose: 103
+    duration_median_ql: 2.0
+  compound:
+    version: 1
+    enabled: true
+    train_pieces: 21
+    train_ids_sha256: ac89538296290933fe4f0ab7c7feaa977c15aca6778667de3d657e45d38dbe1b
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 52
+    matched_phrases: 34
+    recall_probability: 0.6538461538461539
+    by_phase:
+      last:
+        eligible: 18
+        matched: 10
+        p: 0.5555555555555556
+      middle:
+        eligible: 34
+        matched: 24
+        p: 0.7058823529411765
+    length_counts:
+      '4': 23
+      '6': 4
+      '8': 7
+    lag_counts:
+      '1': 24
+      '2': 4
+      '3': 2
+      '5': 1
+      '6': 2
+      '7': 1
+    transform_counts:
+      approximate: 14
+      repeat: 7
+      transpose: 13
+    duration_median_ql: 2.0
+provenance:
+  cache: runs/grammar_cache/symphony.json
+  cache_sha256: 0e370f0186cd81a8beabc6ae182d6bc582ad1d1b4ad7831dc22ee7e9f4426d4a
+  split: exclude is_heldout(id), MD5 modulo 10 == 0

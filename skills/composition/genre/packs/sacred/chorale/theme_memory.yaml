@@ -1,0 +1,86 @@
+# Learned aggregate motif relations; no corpus melody fragments.
+theme_memory:
+  major:
+    version: 1
+    enabled: true
+    train_pieces: 159
+    train_ids_sha256: 5fa954397b356b300fda53b1cfa866093f29f0a288f55cfd50d5c76cf73e5e5f
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 794
+    matched_phrases: 638
+    recall_probability: 0.8035264483627204
+    by_phase:
+      last:
+        eligible: 157
+        matched: 156
+        p: 0.9936305732484076
+      middle:
+        eligible: 637
+        matched: 482
+        p: 0.7566718995290423
+    length_counts:
+      '4': 450
+      '6': 113
+      '8': 75
+    lag_counts:
+      '1': 213
+      '2': 147
+      '3': 127
+      '4': 83
+      '5': 31
+      '6': 18
+      '7': 9
+      '8': 6
+      '9': 2
+      '13': 2
+    transform_counts:
+      approximate: 289
+      repeat: 247
+      transpose: 102
+    duration_median_ql: 4.0
+  minor:
+    version: 1
+    enabled: true
+    train_pieces: 155
+    train_ids_sha256: 48d3a69fd82929f25c2f5b9f63df37fdd5f9af8d98e59f708161095954eb58ee
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 751
+    matched_phrases: 606
+    recall_probability: 0.8069241011984021
+    by_phase:
+      last:
+        eligible: 154
+        matched: 146
+        p: 0.948051948051948
+      middle:
+        eligible: 597
+        matched: 460
+        p: 0.7705192629815746
+    length_counts:
+      '4': 436
+      '6': 111
+      '8': 59
+    lag_counts:
+      '1': 221
+      '2': 158
+      '3': 107
+      '4': 67
+      '5': 23
+      '6': 15
+      '7': 7
+      '8': 2
+      '9': 2
+      '10': 1
+      '11': 2
+      '12': 1
+    transform_counts:
+      approximate: 275
+      repeat: 213
+      transpose: 118
+    duration_median_ql: 4.0
+provenance:
+  cache: runs/grammar_cache/bach_chorales.json
+  cache_sha256: 6f0ce04f938210b3672ee06a25f9f339d2f918b4d58dc41d1ec3b5a3194b0f52
+  split: exclude is_heldout(id), MD5 modulo 10 == 0

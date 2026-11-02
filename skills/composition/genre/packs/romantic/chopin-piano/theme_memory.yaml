@@ -1,0 +1,44 @@
+# Learned aggregate motif relations; no corpus melody fragments.
+subs:
+  mazurka:
+    version: 1
+    enabled: true
+    train_pieces: 201
+    train_ids_sha256: e82f87185621299e4ac58ea7df7128634df7ebbc246c956651cc83456cd28236
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 439
+    matched_phrases: 348
+    recall_probability: 0.7927107061503417
+    by_phase:
+      last:
+        eligible: 156
+        matched: 119
+        p: 0.7628205128205128
+      middle:
+        eligible: 283
+        matched: 229
+        p: 0.8091872791519434
+    length_counts:
+      '4': 128
+      '6': 35
+      '8': 185
+    lag_counts:
+      '1': 255
+      '2': 45
+      '3': 26
+      '4': 6
+      '5': 4
+      '6': 3
+      '7': 2
+      '8': 6
+      '9': 1
+    transform_counts:
+      approximate: 81
+      repeat: 223
+      transpose: 44
+    duration_median_ql: 4.0
+provenance:
+  cache: runs/grammar_cache/chopin.json
+  cache_sha256: 8c8113ccf24484b52ffb63d59c5ef78313e8d025b095feab813353a1e771a5c9
+  split: exclude is_heldout(id), MD5 modulo 10 == 0

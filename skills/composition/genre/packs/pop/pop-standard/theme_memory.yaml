@@ -1,0 +1,43 @@
+# Learned aggregate motif relations; no corpus melody fragments.
+subs:
+  pop:
+    version: 1
+    enabled: true
+    train_pieces: 167
+    train_ids_sha256: 15c4484ce9c8854c5cecbb1a9112eef1e6c0d603e16cb9f51bf246af152fef8e
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 1001
+    matched_phrases: 717
+    recall_probability: 0.7162837162837162
+    by_phase:
+      last:
+        eligible: 125
+        matched: 99
+        p: 0.792
+      middle:
+        eligible: 876
+        matched: 618
+        p: 0.7054794520547946
+    length_counts:
+      '4': 280
+      '6': 153
+      '8': 284
+    lag_counts:
+      '1': 292
+      '2': 143
+      '3': 111
+      '4': 97
+      '5': 43
+      '6': 20
+      '7': 9
+      '8': 2
+    transform_counts:
+      approximate: 254
+      repeat: 445
+      transpose: 18
+    duration_median_ql: 3.5
+provenance:
+  cache: runs/grammar_cache/pop.json
+  cache_sha256: 6d5dca830332434b7e12b24e9e7e8e95df5208704661c4fb132cb0c02623646a
+  split: exclude is_heldout(id), MD5 modulo 10 == 0

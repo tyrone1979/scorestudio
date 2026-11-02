@@ -1,0 +1,191 @@
+# Learned aggregate motif relations; no corpus melody fragments.
+subs:
+  swing:
+    version: 1
+    enabled: true
+    train_pieces: 56
+    train_ids_sha256: f8e6062707cfb343e16c3508e7a8a0e0506e82d5bc05d51413d39732a66f0050
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 144
+    matched_phrases: 65
+    recall_probability: 0.4513888888888889
+    by_phase:
+      last:
+        eligible: 55
+        matched: 27
+        p: 0.4909090909090909
+      middle:
+        eligible: 89
+        matched: 38
+        p: 0.42696629213483145
+    length_counts:
+      '4': 64
+      '6': 1
+    lag_counts:
+      '1': 54
+      '2': 9
+      '3': 2
+    transform_counts:
+      approximate: 56
+      repeat: 2
+      transpose: 7
+    duration_median_ql: 1.5
+  bebop:
+    version: 1
+    enabled: true
+    train_pieces: 49
+    train_ids_sha256: b918cafdc6570914d14a6519add9d01c21b8e905905d7fa16582060b4cb2385c
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 108
+    matched_phrases: 67
+    recall_probability: 0.6203703703703703
+    by_phase:
+      last:
+        eligible: 46
+        matched: 27
+        p: 0.5869565217391305
+      middle:
+        eligible: 62
+        matched: 40
+        p: 0.6451612903225806
+    length_counts:
+      '4': 64
+      '6': 3
+    lag_counts:
+      '1': 61
+      '2': 6
+    transform_counts:
+      approximate: 53
+      repeat: 6
+      transpose: 8
+    duration_median_ql: 1.5
+  cool:
+    version: 1
+    enabled: true
+    train_pieces: 46
+    train_ids_sha256: afd5e26a4dcbe49e10a5784cb67e2a6767a1dae05f0e7bbcd8c20ac2f2d2e2cf
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 114
+    matched_phrases: 55
+    recall_probability: 0.4824561403508772
+    by_phase:
+      last:
+        eligible: 43
+        matched: 19
+        p: 0.4418604651162791
+      middle:
+        eligible: 71
+        matched: 36
+        p: 0.5070422535211268
+    length_counts:
+      '4': 52
+      '6': 3
+    lag_counts:
+      '1': 48
+      '2': 4
+      '3': 3
+    transform_counts:
+      approximate: 45
+      repeat: 4
+      transpose: 6
+    duration_median_ql: 1.5
+  hardbop:
+    version: 1
+    enabled: true
+    train_pieces: 68
+    train_ids_sha256: b4368f4a30f0ace79f5e9350f74dc15573b49356e2bdf7855ed685938ec7448f
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 138
+    matched_phrases: 70
+    recall_probability: 0.5072463768115942
+    by_phase:
+      last:
+        eligible: 67
+        matched: 36
+        p: 0.5373134328358209
+      middle:
+        eligible: 71
+        matched: 34
+        p: 0.4788732394366197
+    length_counts:
+      '4': 68
+      '6': 2
+    lag_counts:
+      '1': 60
+      '2': 8
+      '3': 2
+    transform_counts:
+      approximate: 58
+      repeat: 2
+      transpose: 10
+    duration_median_ql: 1.5
+  postbop:
+    version: 1
+    enabled: true
+    train_pieces: 114
+    train_ids_sha256: a4ea0fb8730616b6f2d9f97a8d2f9b33235b90f5184b0b8211a39ad01bd61d72
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 263
+    matched_phrases: 134
+    recall_probability: 0.5095057034220533
+    by_phase:
+      last:
+        eligible: 110
+        matched: 64
+        p: 0.5818181818181818
+      middle:
+        eligible: 153
+        matched: 70
+        p: 0.45751633986928103
+    length_counts:
+      '4': 130
+      '6': 3
+      '8': 1
+    lag_counts:
+      '1': 116
+      '2': 16
+      '3': 2
+    transform_counts:
+      approximate: 112
+      repeat: 4
+      transpose: 18
+    duration_median_ql: 1.5
+  traditional:
+    version: 1
+    enabled: true
+    train_pieces: 28
+    train_ids_sha256: 736c75041877e30b3bbb055991e7eb3707f95fec05fbcc7e2263404ef315205e
+    representation: relative_intervals_and_normalized_durations
+    match_threshold: 0.82
+    eligible_phrases: 47
+    matched_phrases: 23
+    recall_probability: 0.48936170212765956
+    by_phase:
+      last:
+        eligible: 25
+        matched: 12
+        p: 0.48
+      middle:
+        eligible: 22
+        matched: 11
+        p: 0.5
+    length_counts:
+      '4': 19
+      '6': 3
+      '8': 1
+    lag_counts:
+      '1': 19
+      '2': 4
+    transform_counts:
+      approximate: 20
+      repeat: 3
+    duration_median_ql: 2.0
+provenance:
+  cache: runs/grammar_cache/jazz.json
+  cache_sha256: c730bfa3e91f999c598fc102570ee08395188f571dbd7e80d3af924d4b8439a6
+  split: exclude is_heldout(id), MD5 modulo 10 == 0
