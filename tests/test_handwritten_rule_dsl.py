@@ -18,15 +18,15 @@ def test_file_lists_every_handwritten_rule():
     book = rule_dsl.load()
     for rid in rule_dsl.RULE_IDS:
         assert rid in book, rid
-        assert book[rid].get('名称')
-        assert book[rid].get('说明')
-        assert book[rid]['必须']
-    assert '共同' in book
+        assert book[rid].get('name')
+        assert book[rid].get('means')
+        assert book[rid]['must']
+    assert 'shared' in book
     assert rule_dsl.cadence_lock_beats() == 3
     assert rule_dsl.unattested_forbidden()
     assert rule_dsl.structural_on()
     text = rule_dsl.musician_text(book)
-    for rid in list(rule_dsl.RULE_IDS) + ['共同']:
+    for rid in list(rule_dsl.RULE_IDS) + ['shared']:
         assert rid in text
 
 
@@ -44,13 +44,13 @@ def test_defaults_match_the_old_predicates():
 
 def test_editing_the_file_changes_the_decision():
     src = open(rule_dsl.rules_path(), encoding='utf-8').read()
-    looser = src.replace('女高音跳进超过: 2', '女高音跳进超过: 8', 1)
+    looser = src.replace('soprano leap exceeds: 2', 'soprano leap exceeds: 8', 1)
     book = rule_dsl.load(text=looser)
     # 女高音从 64 到 72，跳进 8 个半音。默认「超过 2」算隐伏；改成超过 8 则不算。
     assert rule_dsl.hidden_perfect_outer(64, 48, 72, 60)
     assert not rule_dsl.hidden_perfect_outer(64, 48, 72, 60, book=book)
 
-    wider = src.replace('次中音与低音不超过: 19', '次中音与低音不超过: 30', 1)
+    wider = src.replace('tenor to bass at most: 19', 'tenor to bass at most: 30', 1)
     book = rule_dsl.load(text=wider)
     voices = [72, 60, 55, 36]  # 次中音与低音相距 19，不超过 19；再拉大才越界
     assert not rule_dsl.spacing_violation(voices)
@@ -58,11 +58,11 @@ def test_editing_the_file_changes_the_decision():
     assert rule_dsl.spacing_violation(far)
     assert not rule_dsl.spacing_violation(far, book=book)
 
-    no_range = src.replace('音高超出该声部音域', '这条不再检查音域', 1)
+    no_range = src.replace('the pitch is outside the voice range', 'this line no longer checks range', 1)
     book = rule_dsl.load(text=no_range)
     assert not rule_dsl.out_of_range(90, 62, 78, book=book)
     assert rule_dsl.cadence_lock_beats(book=rule_dsl.load(
-        text=src.replace('乐句末尾使用终止公式', '末尾不再锁定', 1))) == 0
+        text=src.replace('the phrase ending uses the cadence formula', 'the ending is no longer locked', 1))) == 0
 
 
 def test_studio_menu_opens_the_rules_window():
@@ -83,7 +83,7 @@ def test_studio_menu_opens_the_rules_window():
     app.processEvents()
     help_menu = next(a.menu() for a in window.menuBar().actions() if a.text() == '帮助')
     labels = [a.text() for a in help_menu.actions()]
-    assert '手写规则（可改的定义）' in labels
+    assert 'Handwritten rules' in labels
     window.show_handwritten_rules()
     rules = window._handwritten_rules_window
     rules.resize(1280, 900)

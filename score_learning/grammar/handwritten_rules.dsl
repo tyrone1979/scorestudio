@@ -1,157 +1,158 @@
-# 手写规则（音乐家可改）
-# 检查器和写作器读这一份，不读 Python 里的条件。
-# 改「名称」下面的数字或删掉一行「必须 / 例外」，判定会跟着变。
-# 每一条以「规则 Rxx」开头。# 开头的行是注释。
+# Handwritten rules. A musician can edit this file.
+# Change a number on a line that is already here, or delete a line under "all" or "except".
+# Do not reword a line under "all" or "except". The program knows each sentence by its exact words.
+# The full list of those sentences is in docs/handwritten_rules.md.
+# Each rule starts with "rule Rxx". A line starting with # is a comment.
 
-规则 R01
-名称: 平行纯五度或纯八度
-说明: 任意两个声部，如果两个都移动了，并且移动前、移动后的音程种类相同，而这个音程是纯五度或纯八度，就记一次。同度、超过八度的复合音程、反向进行都算。有一个声部保持不动，是斜向进行，不算。
-检查: 每一对声部，相邻两个时间点
-纯五度: 7
-纯八度: 0
-必须:
-上方声部移动
-下方声部移动
-音程种类不变
-音程种类是纯五度或纯八度
-例外:
-报告: {上方}与{下方}连续纯{五或八}度
+rule R01
+name: Parallel perfect fifths or octaves
+means: Any two voices. If both move, and the kind of interval before the move is the same as the kind after it, and that interval is a perfect fifth or a perfect octave, count one fault. Unisons, compound intervals larger than an octave, and contrary motion all count. If one voice stays still, the motion is oblique and does not count.
+where: every pair of voices, at two successive moments
+perfect fifth: 7
+perfect octave: 0
+all:
+the upper voice moves
+the lower voice moves
+the interval class stays the same
+the interval class is a perfect fifth or octave
+except:
+report: {upper} and {lower} move in parallel perfect fifths or octaves
 
-规则 R02
-名称: 外声部隐伏五度或八度
-说明: 只看女高音和低音。两人同向进行，落到纯五度或纯八度上，并且女高音的跳进大于下面写的半音数，就记一次。女高音只级进（不超过这个半音数）则放过。同一和弦里换位置，或低音作八度移位，也放过。
-检查: 女高音与低音，相邻两个时间点
-纯五度: 7
-纯八度: 0
-女高音跳进超过: 2
-必须:
-到达的音程是纯五度或纯八度
-两个声部都移动
-两个声部同向
-女高音跳进超过规定半音
-例外:
-同一和弦内换位
-低音八度移位
-报告: 外声部隐伏五/八度
+rule R02
+name: Hidden fifth or octave in the outer voices
+means: Look only at the soprano and the bass. If they move in the same direction, arrive on a perfect fifth or octave, and the soprano leap is larger than the number of semitones below, count one fault. A soprano step, no larger than that number, is allowed. So is an exchange inside the same chord, or a bass move of an octave.
+where: soprano and bass, at two successive moments
+perfect fifth: 7
+perfect octave: 0
+soprano leap exceeds: 2
+all:
+the arrival is a perfect fifth or octave
+both voices move
+both voices move the same way
+the soprano leap exceeds the limit
+except:
+same chord, voices exchange
+bass moves by an octave
+report: hidden fifth or octave between the outer voices
 
-规则 R03
-名称: 声部超越
-说明: 下方声部的新音高过上方声部的前一个音，或上方声部的新音低过下方声部的前一个音，就是超越。声部交叉（同时发声时高低颠倒）不在这一条，仍由间距检查处理。从同一个音分开，或只越过拍点上的音、没有越过紧挨着的前一个音，可以放过。
-检查: 相邻的两个声部，从上一拍到这一拍
-必须:
-声部发生超越
-例外:
-从同音分开不计
-只越过拍点未越过前一音不计
-报告: 声部超越
+rule R03
+name: Voice overlap
+means: Overlap means the lower voice's new note is higher than the upper voice's previous note, or the upper voice's new note is lower than the lower voice's previous note. Crossing, where the voices are upside down at the same moment, is not this rule. Spacing handles that. Parting from the same note may be allowed. So may a move that passes only the note on the beat and not the note that came immediately before.
+where: two adjacent voices, from the previous beat to this beat
+all:
+a voice overlaps
+except:
+voices part from a unison
+it does not pass the note immediately before
+report: voice overlap
 
-规则 R06
-名称: 导音须上行解决
-说明: 主和弦到来时，女高音或低音上的导音必须按下面写的半音数上行。内声部不查这一条。副属和弦的导音（副导音）同样必须上行，除非把这条例外删掉。
-检查: 女高音与低音，导音进入主和弦或副导音进入其临时主和弦
-解决上行半音: 1
-声部: 女高音, 低音
-必须:
-该声部是导音
-没有按指定半音上行解决
-例外:
-副导音同样须上行半音
-报告: {声部}导音未上行解决
+rule R06
+name: A leading tone must rise
+means: When the tonic chord arrives, a leading tone in the soprano or the bass must rise by the number of semitones below. The inner voices are not checked. A leading tone in a secondary dominant must rise in the same way, unless that exception line is deleted.
+where: soprano and bass, a leading tone into the tonic, or a secondary leading tone into its temporary tonic
+rises by semitones: 1
+voices: soprano, bass
+all:
+this voice has the leading tone
+it does not rise by the required semitones
+except:
+a secondary leading tone must rise too
+report: {voice} leading tone does not rise
 
-规则 R07
-名称: 七音须级进下行
-说明: 带着七音的和弦，下一拍这个七音应下行小二度或大二度（下面的半音数）。停在原位、但下一和弦仍包含这个音，也算解决。本拍或下一拍的后半拍才下行、七音跟着低音一起上行、或这个七音只是级进经过，可以放过。
-检查: 四个声部里等于前一和弦七音的那个音
-下行解决: -1, -2
-必须:
-该声部是七音
-没有级进下行或保持为和弦音
-例外:
-后半拍级进下行
-七音随低音上行
-级进经过的七音
-报告: {声部}七音未级进下行解决
+rule R07
+name: A seventh must fall by step
+means: In a chord that has a seventh, that seventh should fall by a minor or major second on the next beat. The semitone sizes are listed below. Staying put still counts as a resolution when the next chord contains the same pitch. A fall that happens only on the half beat, a seventh that rises with the bass, or a seventh that is only a passing tone may be allowed.
+where: whichever of the four voices holds the seventh of the previous chord
+resolves down by: -1, -2
+all:
+this voice has the seventh
+it neither falls by step nor holds a chord tone
+except:
+it falls by step on the half beat
+the seventh rises with the bass
+the seventh is only a passing tone
+report: {voice} seventh does not fall by step
 
-规则 R08
-名称: 不良旋律音程
-说明: 同一声部相邻两个音，若半音数出现在「不良半音」里，或大于「大于」，就记一次。现在的不良半音是三全音 6、小七度 10、大七度 11；大于 12 就是超过八度。下行的三全音若马上反向级进回来，可以放过。
-检查: 每一个声部，相邻两个音
-不良半音: 6, 10, 11
-大于: 12
-必须:
-旋律音程属于不良音程
-例外:
-下行三全音后反向级进
-报告: {声部}不良旋律音程 {音程}
+rule R08
+name: A forbidden melodic interval
+means: In one voice, two successive notes count as a fault when their distance in semitones is listed under forbidden semitones, or is greater than "wider than". The forbidden sizes now are a tritone (6), a minor seventh (10), and a major seventh (11). Wider than 12 means a leap past an octave. A descending tritone that immediately steps back the other way may be allowed.
+where: each voice, two successive notes
+forbidden semitones: 6, 10, 11
+wider than: 12
+all:
+the melodic interval is forbidden
+except:
+a descending tritone steps back
+report: {voice} forbidden melodic interval {interval}
 
-规则 R09
-名称: 和弦应完整且导音不重复
-说明: 一个和弦里导音最多出现下面写的次数。三和弦必须能听到根音和三音；带七音的和弦还要听到七音。缺了任何一项就记一次。重复三音或五音不在这一条里禁止。
-检查: 每一拍上的四个音
-导音最多出现: 1
-必须有: 根音, 三音
-七和弦还要: 七音
-匹配: 任一
-必须:
-导音出现次数超过规定
-缺少规定的和弦音
-例外:
-报告: 导音重复或和弦不完整
-写作时七音不重复: 是
+rule R09
+name: A chord should be complete, and its leading tone not doubled
+means: A leading tone may appear at most the number of times written below. A triad must be heard with its root and its third. A seventh chord must also be heard with its seventh. Missing any of these counts as one fault. Doubling the third or the fifth is not forbidden here.
+where: the four notes on each beat
+leading tone at most: 1
+must include: root, third
+a seventh chord also needs: seventh
+writer forbids a doubled seventh: yes
+match: any
+all:
+the leading tone is doubled
+a required chord tone is missing
+except:
+report: leading tone doubled, or the chord is incomplete
 
-规则 R04
-名称: 声部不交叉，相邻间距有上限
-说明: 同时发声时，女高音不低于中音，中音不低于次中音，次中音不低于低音。同度允许。女高音与中音、中音与次中音的距离不超过下面的半音数；次中音与低音可以更宽，上限单独写。检查时这一条和声部交叉合在一起报告。写作挑内声部时，默认还要求相邻声部不能停在同一个音上，高低必须分开。
-检查: 每一拍上的四个音
-报告编号: R03/R04
-女高音与中音不超过: 12
-中音与次中音不超过: 12
-次中音与低音不超过: 19
-允许同度: 是
-写作候选禁止同度: 是
-匹配: 任一
-必须:
-声部交叉
-相邻间距超过规定
-例外:
-报告: 交叉或间距过大
+rule R04
+name: Voices do not cross, and adjacent voices stay within a limit
+means: At the same moment the soprano is not below the alto, the alto is not below the tenor, and the tenor is not below the bass. A unison is allowed. The soprano-alto gap and the alto-tenor gap may not exceed the semitone numbers below. The tenor-bass gap may be wider, and its limit is written separately. The checker reports this together with voice crossing. When the writer chooses inner voices, adjacent voices must also sit on different notes, one above the other.
+where: the four notes on each beat
+report id: R03/R04
+soprano to alto at most: 12
+alto to tenor at most: 12
+tenor to bass at most: 19
+unison allowed: yes
+writer forbids unison: yes
+match: any
+all:
+the voices cross
+adjacent voices stand too far apart
+except:
+report: voices cross or stand too far apart
 
-规则 R05
-名称: 声部不超出自己的音域
-说明: 女高音、中音、次中音、低音各自有一个最低音和最高音。音超出了就记一次。上下限本身算在音域里面。这四个界限不是写死在这里的，它们是从公开乐谱里学来的，存在该风格的规则文件里（音域一项）。改那个文件里的最低音或最高音，这一条的判决就跟着变。
-检查: 每一个声部的音高，对照该声部学到的音域
-含上下限: 是
-必须:
-音高超出该声部音域
-例外:
-报告: {声部}出音域
+rule R05
+name: A voice stays inside its own range
+means: Soprano, alto, tenor, and bass each have a lowest and a highest note. A note outside that span counts as one fault. The lowest and highest notes themselves are inside the range. Those four limits are not written here. They are learned from public scores and stored in that style's rule file, under the voice ranges. Change a lowest or highest note there, and this test follows the new limit.
+where: each voice's pitch, compared with the range learned for that voice
+bounds included: yes
+all:
+the pitch is outside the voice range
+except:
+report: {voice} is outside its range
 
-规则 R10
-名称: 没用过的和弦连接不用
-说明: 写作时，两个和弦前后相接，必须是公开乐谱里出现过的接法。没出现过的接法不进入候选。这一条只约束写作，不在成品检查里另报一条。
-检查: 写作时的和弦转移
-必须:
-未出现的和弦连接禁止使用
-例外:
-报告: 未出现的和弦连接
+rule R10
+name: Do not use a chord pair that never occurred
+means: While writing, two chords in succession must be a pair that occurred in the public scores. A pair that never occurred is not a candidate. This rule constrains writing only. The checker does not report it on a finished score.
+where: chord moves while writing
+all:
+an unattested chord pair is forbidden
+except:
+report: unattested chord pair
 
-规则 R11
-名称: 乐句末尾锁在终止公式上
-说明: 每一乐句的最后几拍，和弦必须是抽中的那条终止公式，女高音的音级也按公式锁定。前面的拍可以另选。写作才用这一条，成品检查不另报。
-检查: 写作每一个乐句的末尾
-锁定末尾拍数: 3
-女高音锁定末尾度数: 2
-必须:
-乐句末尾使用终止公式
-例外:
-报告: 乐句末尾未锁在终止公式上
+rule R11
+name: The end of a phrase is locked to a cadence formula
+means: The last few beats of each phrase must use the cadence formula that was drawn, and the soprano degrees are locked to that formula too. Earlier beats may be chosen freely. Only the writer uses this rule. The checker does not report it.
+where: the end of each phrase while writing
+beats locked at the end: 3
+soprano degrees locked: 2
+all:
+the phrase ending uses the cadence formula
+except:
+report: the phrase ending is not locked to the cadence formula
 
-规则 共同
-名称: 拍点上的挂留按解决音判断
-说明: 拍点上的挂留或倚音，如果在本拍后半拍级进到和弦音，平行、隐伏和和弦完整性按那个解决音判断，不按挂留音本身。关掉教材例外时，这一条不生效。
-检查: R01、R02、R09 在看拍点时
-级进不超过: 2
-必须:
-拍点挂留按解决音判断
-例外:
-报告: 按解决音判断
+rule shared
+name: Judge a suspension on the beat by the note it resolves to
+means: A suspension or appoggiatura on the beat, if it steps to a chord tone within the beat, is judged by that resolution for parallels, hidden fifths and octaves, and chord completeness. It is not judged by the suspended note itself. When the textbook exceptions are turned off, this rule does not apply.
+where: R01, R02, and R09 when they look at a beat
+step no wider than: 2
+all:
+a beat suspension is judged by its resolution
+except:
+report: judged by the resolution

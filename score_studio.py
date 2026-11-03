@@ -4830,7 +4830,7 @@ class StudioWindow(QMainWindow):
         help_edit.triggered.connect(
             lambda: self.show_help_dialog('编辑教程', '编辑教程 · 莫扎特小夜曲'))
         help_menu.addAction(help_edit)
-        help_rules = QAction("手写规则（可改的定义）", self)
+        help_rules = QAction("Handwritten rules", self)
         help_rules.triggered.connect(self.show_handwritten_rules)
         help_menu.addAction(help_rules)
         help_menu.addSeparator()

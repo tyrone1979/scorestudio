@@ -20,7 +20,7 @@ _SETTINGS = ('ComposerChat', 'ScoreStudio')
 _KEY = 'ui/language'
 LANGS = ('zh', 'en')
 
-_lang = 'zh'
+_lang = 'en'
 
 
 def language() -> str:
@@ -33,15 +33,15 @@ def initial_language() -> str:
         return env
     try:
         from PyQt5.QtCore import QSettings
-        v = str(QSettings(*_SETTINGS).value(_KEY, 'zh') or 'zh').lower()
-        return v if v in LANGS else 'zh'
+        v = str(QSettings(*_SETTINGS).value(_KEY, 'en') or 'en').lower()
+        return v if v in LANGS else 'en'
     except Exception:
-        return 'zh'
+        return 'en'
 
 
 def set_language(lang: str, persist: bool = True) -> None:
     global _lang
-    _lang = lang if lang in LANGS else 'zh'
+    _lang = lang if lang in LANGS else 'en'
     if persist:
         try:
             from PyQt5.QtCore import QSettings

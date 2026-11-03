@@ -1,71 +1,227 @@
-# 手写规则怎么读、怎么改
+# How to read and edit the handwritten rules
 
-写作和检查用的是同一份定义，文件在：
+The writer and the checker share one definition. The file is:
 
 `score_learning/grammar/handwritten_rules.dsl`
 
-打开这份文件就能改。程序不在 Python 里另写一套条件。改完保存，下一次写作或检查就按新的句子算。在桌面窗口的「帮助」菜单里选「手写规则（可改的定义）」，左边是给音乐家读的说明，右边是这份文件。
+Open it and edit a number that is already there, or delete a line under `all:` or `except:`. Save the file. The next time you write or check a score, that edit is used.
 
-## 文件怎么排
+In the desktop window, choose Help, then Handwritten rules. The left side is the reading. The right side is the file.
 
-每一条以 `规则` 加编号开头。编号是 R01 到 R11，另外有一条 `共同`，管拍点上的挂留。
+## Which sentences you may write
 
-一条里面通常有这些行：
+A line under `all:` or `except:` is a fixed sentence. The program already knows each one, and it matches the words exactly. `the upper voice moves` is one of those sentences. It is already written under R01. You keep it, or you delete the whole line.
 
-- `名称`：这条在说什么。
-- `说明`：用乐理语言写的定义。
-- `检查`：看哪些音。
-- 带数字的行：可以改的界限，例如 `女高音跳进超过: 2`。
-- `必须`：下面每一句都成立，才记一次违例。如果写了 `匹配: 任一`，有一句成立就记。
-- `例外`：写成可以放过的情况。删掉其中一行，那种情况就不再放过。
-- `报告`：检查结果里怎么说。
+You do not invent a new sentence, and you do not reword one. `the top voice moves` is a different sentence. The program does not know it, and the next check stops with `has an unknown condition`.
 
-`#` 开头的行是注释，程序不读。
+`name`, `means`, `where`, and `report` are for reading. Changing those words does not change the test.
 
-R10 和 R11 只在写作时用：没在乐谱里出现过的和弦连接不拿来用，乐句最后几拍锁在抽中的终止公式上。成品检查不另报这两条。
+The lines you may keep or delete are these.
 
-## 十一条各自管什么
+R01, under `all:`
 
-| 编号 | 名称 | 你最常改的地方 |
+```
+the upper voice moves
+the lower voice moves
+the interval class stays the same
+the interval class is a perfect fifth or octave
+```
+
+R02, under `all:`
+
+```
+the arrival is a perfect fifth or octave
+both voices move
+both voices move the same way
+the soprano leap exceeds the limit
+```
+
+R02, under `except:`
+
+```
+same chord, voices exchange
+bass moves by an octave
+```
+
+R03, under `all:`
+
+```
+a voice overlaps
+```
+
+R03, under `except:`
+
+```
+voices part from a unison
+it does not pass the note immediately before
+```
+
+R04, under `all:`
+
+```
+the voices cross
+adjacent voices stand too far apart
+```
+
+R05, under `all:`
+
+```
+the pitch is outside the voice range
+```
+
+R06, under `all:`
+
+```
+this voice has the leading tone
+it does not rise by the required semitones
+```
+
+R06, under `except:`
+
+```
+a secondary leading tone must rise too
+```
+
+R07, under `all:`
+
+```
+this voice has the seventh
+it neither falls by step nor holds a chord tone
+```
+
+R07, under `except:`
+
+```
+it falls by step on the half beat
+the seventh rises with the bass
+the seventh is only a passing tone
+```
+
+R08, under `all:`
+
+```
+the melodic interval is forbidden
+```
+
+R08, under `except:`
+
+```
+a descending tritone steps back
+```
+
+R09, under `all:`
+
+```
+the leading tone is doubled
+a required chord tone is missing
+```
+
+R10, under `all:`
+
+```
+an unattested chord pair is forbidden
+```
+
+R11, under `all:`
+
+```
+the phrase ending uses the cadence formula
+```
+
+`shared`, under `all:`
+
+```
+a beat suspension is judged by its resolution
+```
+
+A line with a colon is a name the program already knows, followed by a value. Change the value. Do not add a new name. The names are:
+
+```
+perfect fifth
+perfect octave
+soprano leap exceeds
+rises by semitones
+voices
+resolves down by
+forbidden semitones
+wider than
+leading tone at most
+must include
+a seventh chord also needs
+writer forbids a doubled seventh
+soprano to alto at most
+alto to tenor at most
+tenor to bass at most
+unison allowed
+writer forbids unison
+bounds included
+beats locked at the end
+soprano degrees locked
+step no wider than
+```
+
+`voices` takes `soprano`, `alto`, `tenor`, `bass`. `must include` and `a seventh chord also needs` take `root`, `third`, `fifth`, `seventh`. A yes-or-no value is the word `yes` or the word `no`.
+
+## How a rule is laid out
+
+Each rule starts with `rule` and an id. The ids run from R01 to R11. One more rule, `shared`, covers a suspension on the beat.
+
+A rule usually has these lines:
+
+- `name`: what the rule is called.
+- `means`: the definition in ordinary musical language.
+- `where`: which notes are checked.
+- A line with a number: a limit you can change, for example `soprano leap exceeds: 2`.
+- `all`: every sentence below must be true before a fault is counted. If the rule says `match: any`, one true sentence is enough.
+- `except`: cases that are allowed through. Delete one of those lines, and that case is no longer allowed.
+- `report`: the words used in the check result.
+
+A line that starts with `#` is a comment. The program skips it.
+
+R10 and R11 are used only while writing. A chord pair that never occurred in the scores is not used, and the last beats of a phrase stay locked to the cadence formula that was drawn. The checker does not report these two on a finished score.
+
+## What each rule covers
+
+| Id | Name | What you usually change |
 | --- | --- | --- |
-| R01 | 平行纯五度或纯八度 | `纯五度`、`纯八度` 后面的半音数 |
-| R02 | 外声部隐伏五度或八度 | `女高音跳进超过`。变大，则更大的跳进才算 |
-| R03 | 声部超越 | 例外两行。删掉就不再放过那种进行 |
-| R04 | 不交叉、相邻间距 | 三个「不超过」。次中音与低音可以比上面两对更宽 |
-| R05 | 音域 | 界限不在这份文件里，在该风格学到的音域里。这里只规定「超出就记，上下限算在内」 |
-| R06 | 导音上行解决 | `解决上行半音`，以及查哪些声部 |
-| R07 | 七音级进下行 | `下行解决` 后面的半音数，默认是 -1 和 -2 |
-| R08 | 不良旋律音程 | `不良半音` 和 `大于` |
-| R09 | 和弦完整、导音不重复 | `导音最多出现`、`必须有`、`七和弦还要` |
-| R10 | 没用过的和弦连接不用 | 删掉「必须」那一句，写作就允许没出现过的连接 |
-| R11 | 乐句末尾锁在终止公式上 | `锁定末尾拍数`、`女高音锁定末尾度数` |
+| R01 | Parallel perfect fifths or octaves | the semitone numbers after `perfect fifth` and `perfect octave` |
+| R02 | Hidden fifth or octave in the outer voices | `soprano leap exceeds`. A larger number waits for a larger leap |
+| R03 | Voice overlap | the two lines under `except`. Delete one and that motion is no longer allowed |
+| R04 | No crossing, and a limit on the gap | the three `at most` numbers. Tenor to bass may be wider than the pairs above |
+| R05 | Range | the limits are not in this file. They are the learned range for each voice. This rule only says that a note outside the range counts, and that the limits themselves are inside the range |
+| R06 | A leading tone must rise | `rises by semitones`, and which voices are checked |
+| R07 | A seventh must fall by step | the semitone numbers after `resolves down by`. The default is -1 and -2 |
+| R08 | A forbidden melodic interval | `forbidden semitones` and `wider than` |
+| R09 | A complete chord, and no doubled leading tone | `leading tone at most`, `must include`, and `a seventh chord also needs` |
+| R10 | Do not use a chord pair that never occurred | delete the sentence under `all`, and writing may use a pair that never occurred |
+| R11 | The end of a phrase is locked to a cadence formula | `beats locked at the end` and `soprano degrees locked` |
 
-`共同` 这一条：拍点上的挂留或倚音，若在本拍内级进解决，平行、隐伏和和弦是否完整按解决音判断。`级进不超过` 默认是 2 个半音。
+`shared`: a suspension or appoggiatura on the beat, if it steps to a chord tone within the beat, is judged by that resolution for parallels, hidden fifths and octaves, and chord completeness. `step no wider than` defaults to 2 semitones.
 
-## 改一个数
+## Change one number
 
-隐伏五度现在要求女高音的跳进大于 2 个半音。若只想抓住更大的跳进，把 R02 里的这一行改成：
-
-```
-女高音跳进超过: 4
-```
-
-保存后再检查。跳进正好是 3 或 4 个半音、其余条件都满足的进行，就不再记 R02。
-
-音域不在这里改。打开该风格的规则文件，找到音域的最低音和最高音。把女高音的最高音降低，再检查，超出新上限的音会记成 R05。
-
-## 删掉一条例外
-
-R08 默认放过「下行三全音之后马上反向级进」。若这种进行也要记，删掉 R08 下面这一行：
+A hidden fifth now requires the soprano leap to be larger than 2 semitones. To catch only a larger leap, change this line under R02:
 
 ```
-下行三全音后反向级进
+soprano leap exceeds: 4
 ```
 
-不要删 `例外:` 这个标题本身。标题留着、下面没有句子，表示没有可以放过的情况。
+Save, then check again. A move whose soprano leap is 3 or 4 semitones, with every other condition met, is no longer reported as R02.
 
-## 和学来的规则不是一回事
+Do not change a voice range in this file. Open the style's rule file and change the lowest or highest note. Lower the soprano's highest note, check again, and a note above the new limit is reported as R05.
 
-学来的规则记的是乐谱里某一种写法出现过多少次，存在风格规则文件里。这份文件里的句子是人写的是非题：违反了，写作就不走那一步，检查就报编号和拍点。
+## Delete one exception
 
-R05 的最低音、最高音是学来的数，挂在这条人写的规则上。改那些数，改的是音域检查，不会改学来的和弦接法清单。
+R08 allows a descending tritone that immediately steps back. To count that motion as well, delete this line under R08:
+
+```
+a descending tritone steps back
+```
+
+Leave the heading `except:`. A heading with no sentences under it means nothing is allowed through.
+
+## These are not the learned rules
+
+A learned rule records one way of writing and how often it occurred. It lives in the style's rule file. A sentence in this file is a yes-or-no test written by a person. If a step fails the test, the writer will not take it, and the checker reports the rule and the beat.
+
+The lowest and highest notes used by R05 are learned numbers attached to this handwritten test. Changing those numbers changes the range check. It does not change the list of learned chord pairs.

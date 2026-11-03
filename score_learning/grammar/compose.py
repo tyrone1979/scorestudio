@@ -502,7 +502,7 @@ def _transition(g, tonic_pc, pos, sa, sb):
             for j, (cj, _m2) in enumerate(sb):
                 if g.chords[cj][0] == 0 and D[i, j] != step:
                     T[i, j] = NEG
-        if q in ('M', '7') and rule_dsl.has_exception('R06', '副导音同样须上行半音'):
+        if q in ('M', '7') and rule_dsl.has_exception('R06', 'a secondary leading tone must rise too'):
             for j, (cj, _m2) in enumerate(sb):
                 if (D[i, j] != step and
                         secondary_lt(root, q, g.chords[cj][0], g.mode) == rel):
@@ -683,7 +683,7 @@ def compose_bass(g, tonic_pc, chords, sop, prev):
         step = rule_dsl.leading_step()
         if rel == LT and ra in (7, 11) and rb == 0 and b - a != step:
             return NEG
-        if (b - a != step and rule_dsl.has_exception('R06', '副导音同样须上行半音')
+        if (b - a != step and rule_dsl.has_exception('R06', 'a secondary leading tone must rise too')
                 and secondary_lt(ra, qa, rb, g.mode) == rel):
             return NEG
         r = g.bass_iv.get(max(-12, min(12, b - a)), math.log(1e-4))
