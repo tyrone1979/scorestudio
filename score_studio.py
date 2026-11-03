@@ -4830,6 +4830,9 @@ class StudioWindow(QMainWindow):
         help_edit.triggered.connect(
             lambda: self.show_help_dialog('编辑教程', '编辑教程 · 莫扎特小夜曲'))
         help_menu.addAction(help_edit)
+        help_rules = QAction("手写规则（可改的定义）", self)
+        help_rules.triggered.connect(self.show_handwritten_rules)
+        help_menu.addAction(help_rules)
         help_menu.addSeparator()
         help_pro = QAction("专业文档（命令/功能实测验证版）", self)
         help_pro.triggered.connect(
@@ -8397,6 +8400,15 @@ class StudioWindow(QMainWindow):
             'style="font-family:Microsoft YaHei,Segoe UI,sans-serif;font-size:13px;">'
             + '\n'.join(lines) + '</body></html>'
         )
+
+    def show_handwritten_rules(self):
+        """打开音乐家可读的手写规则定义。左边是说明，右边是定义文件。"""
+        from PyQt5.QtCore import Qt
+        from score_learning.grammar.rule_view import build_window
+        win = build_window()
+        win.setWindowFlags(Qt.Window)
+        self._handwritten_rules_window = win
+        win.show()
 
     def show_help_dialog(self, topic=None, title='帮助文档'):
         """弹出一个独立帮助对话框，渲染 help_doc.build_help(topic) 的 markdown。"""

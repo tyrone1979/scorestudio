@@ -23,6 +23,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
+from . import rule_dsl
 from .check import (PAIRS, bad_melodic, check_satb, hidden_perfect_outer, overlap,
                     parallel_perfect, secondary_lt)
 from .learn import BackoffModel, pos_class, _resample
@@ -255,10 +256,14 @@ class Grammar:
         """位置条件下的和弦转移对数概率（L2→L1→L0 回退），未出现过的二元组为 -inf。"""
         if pos not in self._H:
             M = np.full((self.V, self.V), NEG)
+            forbid = rule_dsl.unattested_forbidden()
             for i, a in enumerate(self.vocab):
                 for j, b in enumerate(self.vocab):
                     if self.attested[i, j]:
                         M[i, j] = math.log(self.model.prob(None, a, pos, b))
+                    elif not forbid:
+                        p = self.model.prob(None, a, pos, b)
+                        M[i, j] = math.log(p) if p > 0 else math.log(1e-12)
             self._H[pos] = M
         return self._H[pos]
 
@@ -410,7 +415,10 @@ def _slot_meta(bars: int, pickup: bool = False):
 def _sop_candidates(g: Grammar, tonic_pc: int, ci: int, fixed_pc: Optional[int]):
     root, q, _inv = g.chords[ci]
     pcs = set(chord_pcs(root, q))
-    lo, hi = g.ranges['S']['low'], g.ranges['S']['high']
+    if rule_dsl.range_enforced():
+        lo, hi = g.ranges['S']['low'], g.ranges['S']['high']
+    else:
+        lo, hi = 0, 127
     out = []
     for m in range(lo, hi + 1):
         rel = (m - tonic_pc) % 12
@@ -423,9 +431,19 @@ def _phrase_states(g, tonic_pc, meta, formula, prev_sop=None):
     L = len(meta)
     fixed_ch = [None] * L
     fixed_sp = [None] * L
-    for k, c in enumerate(formula['chords']):
-        fixed_ch[L - 3 + k] = g.idx[c]
-    fixed_sp[L - 2], fixed_sp[L - 1] = formula['soprano']
+    nlock = rule_dsl.cadence_lock_beats()
+    if nlock:
+        chords = list(formula['chords'])
+        nlock = min(nlock, len(chords), L)
+        for k, c in enumerate(chords[-nlock:]):
+            fixed_ch[L - nlock + k] = g.idx[c]
+    nsp = rule_dsl.soprano_lock_beats()
+    sop = formula.get('soprano')
+    if nsp and sop:
+        degrees = list(sop)
+        nsp = min(nsp, len(degrees), L)
+        for i, deg in enumerate(degrees[-nsp:]):
+            fixed_sp[L - nsp + i] = deg
     states = []
     for t in range(L):
         cis = [fixed_ch[t]] if fixed_ch[t] is not None else range(g.V)
@@ -464,22 +482,29 @@ def _transition(g, tonic_pc, pos, sa, sb):
     ivv = np.vectorize(lambda d: ivt.get(int(max(-12, min(12, d))), math.log(1e-4)))
     T += ivv(D)
     T[D == 0] -= g.repeat_bias
-    bad = (np.abs(D) == 6) | (np.abs(D) == 10) | (np.abs(D) == 11) | (np.abs(D) > 12)
+    bad_semi, wider_than = rule_dsl.melodic_limits()
+    bad = np.abs(D) > wider_than
+    for semi in bad_semi:
+        bad = bad | (np.abs(D) == semi)
     T[bad] = NEG
+    downs = rule_dsl.seventh_steps()
+    step = rule_dsl.leading_step()
     for i, (ci, m) in enumerate(sa):
         root, q, _ = g.chords[ci]
         rel = (m - tonic_pc) % 12
         mem = chord_members(root, q)
         if q in SEVENTHS and mem.get(rel) == '7':
-            ok = (D[i] == -1) | (D[i] == -2) | (D[i] == 0)
+            ok = D[i] == 0
+            for d in downs:
+                ok = ok | (D[i] == d)
             T[i, ~ok] = NEG
         if rel == LT and root in (7, 11) and q in ('M', '7', 'd', 'o7', 'h7'):
             for j, (cj, _m2) in enumerate(sb):
-                if g.chords[cj][0] == 0 and D[i, j] != 1:
+                if g.chords[cj][0] == 0 and D[i, j] != step:
                     T[i, j] = NEG
-        if q in ('M', '7'):
+        if q in ('M', '7') and rule_dsl.has_exception('R06', '副导音同样须上行半音'):
             for j, (cj, _m2) in enumerate(sb):
-                if (D[i, j] != 1 and
+                if (D[i, j] != step and
                         secondary_lt(root, q, g.chords[cj][0], g.mode) == rel):
                     T[i, j] = NEG
     return T
@@ -540,7 +565,8 @@ def compose_phrase_candidates(g, tonic_pc, meta, formula, template, center, prev
         # Joint harmony/soprano search: constrain the motif, NOT a finished score.
         # Leave the last three cadence beats free for the requested ending.
         mids, shift = theme
-        for t, m in enumerate(mids[:max(0, len(meta) - 3)]):
+        lock = rule_dsl.cadence_lock_beats()
+        for t, m in enumerate(mids[:max(0, len(meta) - lock)]):
             states[t] = [(ci, pitch) for ci, pitch in states[t] if pitch == m + shift]
     if any(not s for s in states):
         return []
@@ -619,7 +645,10 @@ def score_candidate(g, tonic_pc, meta, seq, prev_chords, E_center, template, pre
 # ======================================================================== 低音
 def compose_bass(g, tonic_pc, chords, sop, prev):
     """低音 Viterbi。prev = (上一拍女高音, 上一拍低音, 上一拍和弦) 或 None。"""
-    lo, hi = g.ranges['B']['low'], g.ranges['B']['high']
+    if rule_dsl.range_enforced():
+        lo, hi = g.ranges['B']['low'], g.ranges['B']['high']
+    else:
+        lo, hi = 0, 127
     mean = g.ranges['B']['mean']
     L = len(chords)
     cands = []
@@ -647,12 +676,15 @@ def compose_bass(g, tonic_pc, chords, sop, prev):
         rb = g.chords[cb][0]
         rel = (a - tonic_pc) % 12
         if qa in SEVENTHS and chord_members(ra, qa).get(rel) == '7':
-            if not (b - a in (-1, -2) or (b == a and (b - tonic_pc) % 12 in
-                                              chord_pcs(*g.chords[cb][:2]))):
+            downs = rule_dsl.seventh_steps()
+            held = b == a and (b - tonic_pc) % 12 in chord_pcs(*g.chords[cb][:2])
+            if b - a not in downs and not held:
                 return NEG
-        if rel == LT and ra in (7, 11) and rb == 0 and b - a != 1:
+        step = rule_dsl.leading_step()
+        if rel == LT and ra in (7, 11) and rb == 0 and b - a != step:
             return NEG
-        if b - a != 1 and secondary_lt(ra, qa, rb, g.mode) == rel:
+        if (b - a != step and rule_dsl.has_exception('R06', '副导音同样须上行半音')
+                and secondary_lt(ra, qa, rb, g.mode) == rel):
             return NEG
         r = g.bass_iv.get(max(-12, min(12, b - a)), math.log(1e-4))
         # 外声部条件关系 P(低音方向 | 女高方向)：语料里女高↑时低音 57% ↓、
@@ -724,23 +756,29 @@ def _inner_states(g, tonic_pc, ci, s, b):
     pcs = chord_pcs(root, q)
     mem = chord_members(root, q)
     ra, rt = g.ranges['A'], g.ranges['T']
-    if HARD_CONSTRAINTS:
+    if HARD_CONSTRAINTS and rule_dsl.range_enforced():
         a_lo, a_hi = ra['low'], ra['high']
         t_lo, t_hi = rt['low'], rt['high']
     else:
         a_lo, a_hi = 0, 127
         t_lo, t_hi = 0, 127
+    sa_max, at_max, tb_cap = rule_dsl.gap_limits()
+    strict = rule_dsl.writer_forbids_unison()
+
+    def _ordered(lo, mid, hi):
+        return lo < mid < hi if strict else lo <= mid <= hi
+
     out = []
     for a in range(a_lo, a_hi + 1):
         if (a - tonic_pc) % 12 not in pcs:
             continue
-        if HARD_CONSTRAINTS and (not (b < a < s) or s - a > 12):
+        if HARD_CONSTRAINTS and (not _ordered(b, a, s) or s - a > sa_max):
             continue
         for t in range(t_lo, t_hi + 1):
             if (t - tonic_pc) % 12 not in pcs:
                 continue
-            if HARD_CONSTRAINTS and (not (b < t < a)
-                                     or a - t > 12 or t - b > 19):
+            if HARD_CONSTRAINTS and (not _ordered(b, t, a)
+                                     or a - t > at_max or t - b > tb_cap):
                 continue
             rel = [(x - tonic_pc) % 12 for x in (s, a, t, b)]
             roles = [mem.get(r) for r in rel]
@@ -748,9 +786,10 @@ def _inner_states(g, tonic_pc, ci, s, b):
                 need = {'R', '3'} | ({'7'} if q in SEVENTHS else set())
                 if not need <= set(roles):
                     continue
-                if LT in pcs and rel.count(LT) > 1 and root in (7, 11):
+                if LT in pcs and rel.count(LT) > rule_dsl.leading_cap() and root in (7, 11):
                     continue
-                if q in SEVENTHS and roles.count('7') > 1:
+                if (rule_dsl.forbid_doubled_seventh() and q in SEVENTHS
+                        and roles.count('7') > 1):
                     continue
             key = f'{"7th" if q in SEVENTHS else "triad"}:{inv}'
             e = 0.0
@@ -1034,7 +1073,7 @@ def _compose_once(g, tonic, tonic_pc, key_sharps, phrases, seed, barform, title,
         motif_offset = 0
         if ref is not None:
             length = min(6, choose_weighted(policy.get('length_counts'), rng, 4),
-                         L - 3, len(theme_events[ref]))
+                         L - rule_dsl.cadence_lock_beats(), len(theme_events[ref]))
             for offset in range(max(0, len(theme_events[ref]) - length + 1)):
                 fragment = theme_events[ref][offset:offset + length]
                 if informative(fragment):
@@ -1111,7 +1150,7 @@ def _compose_once(g, tonic, tonic_pc, key_sharps, phrases, seed, barform, title,
             c = g.vocab[chords[t]]
             pos = meta[t]['pos']
             rule = g.harmony_rule(p2, p1, pos, c)
-            in_formula = t >= L - 3
+            in_formula = t >= L - rule_dsl.cadence_lock_beats()
             if pickup:
                 # 时间从弱起拍 0 起算；第 0 小节是只有一拍的弱起小节
                 bt, bn = float(bar_cursor * 4 + t), bar_cursor + meta[t]['bar']

@@ -1,53 +1,47 @@
 # -*- coding: utf-8 -*-
-"""四部和声硬规则（R01–R09）：作曲器的搜索约束与成品检查共用同一份实现。"""
+"""四部和声手写规则。
+
+R01–R11 与「共同」例外的定义在 ``handwritten_rules.dsl``。
+作曲器的搜索约束与成品检查共用 ``rule_dsl`` 读到的同一份定义。
+R10、R11 只在写作时生效。
+"""
 from __future__ import annotations
 
 from typing import Dict, List, Optional, Sequence, Tuple
 
+from . import rule_dsl
 from .theory import scale_of
 
-PERFECT = (0, 7)
 VOICE_NAMES = ('女高音', '中音', '次中音', '低音')
 PAIRS = [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
 
 
 def parallel_perfect(a1: int, b1: int, a2: int, b2: int) -> bool:
-    """R01：同一对声部连续纯五 / 纯八（含同度、复合音程、反向平行）；两声部都须移动，
-    一声部保持、另一声部八度跳进属于斜向进行，不算。"""
-    if a1 == a2 or b1 == b2:
-        return False
-    i1, i2 = (a1 - b1) % 12, (a2 - b2) % 12
-    return i1 == i2 and i1 in PERFECT
+    """R01，条件见 handwritten_rules.dsl。"""
+    return rule_dsl.parallel_perfect(a1, b1, a2, b2)
 
 
 def hidden_perfect_outer(s1: int, b1: int, s2: int, b2: int) -> bool:
-    """R02：外声部同向进入纯五 / 纯八且女高音跳进。"""
-    if (s2 - b2) % 12 not in PERFECT:
-        return False
-    ds, db = s2 - s1, b2 - b1
-    if ds == 0 or db == 0 or (ds > 0) != (db > 0):
-        return False
-    return abs(ds) > 2
+    """R02，条件见 handwritten_rules.dsl。同一和弦与低音八度移位的例外在检查循环里。"""
+    return rule_dsl.hidden_perfect_outer(s1, b1, s2, b2)
 
 
 def bad_melodic(a: int, b: int) -> bool:
-    """R08（半音近似）：三全音、七度、大于八度的跳进。"""
-    d = abs(b - a)
-    return d == 6 or d in (10, 11) or d > 12
+    """R08，不良半音与「大于」见 handwritten_rules.dsl。"""
+    return rule_dsl.bad_melodic(a, b)
 
 
-def spacing_ok(v: Sequence[int], tb_max: int = 19) -> bool:
-    """R03 + R04：不交叉（允许同度）、相邻声部间距。"""
-    s, a, t, b = v
-    return s >= a >= t >= b and s - a <= 12 and a - t <= 12 and t - b <= tb_max
+def spacing_ok(v: Sequence[int], tb_max: Optional[int] = None) -> bool:
+    """R04，间距与是否允许同度见 handwritten_rules.dsl。
+
+    tb_max 只覆盖次中音与低音的上限；不传则用定义文件里的数。
+    """
+    return not rule_dsl.spacing_violation(v, tb_max)
 
 
 def overlap(prev: Sequence[int], cur: Sequence[int]) -> bool:
-    """R03 超越：下方声部越过上方声部上一拍的音（或反之）。"""
-    for i in range(3):
-        if cur[i + 1] > prev[i] or cur[i] < prev[i + 1]:
-            return True
-    return False
+    """R03，定义见 handwritten_rules.dsl。"""
+    return rule_dsl.overlap(prev, cur)
 
 
 def structural_pitches(b: Dict, half: Optional[Sequence[int]]) -> List[int]:
@@ -57,7 +51,7 @@ def structural_pitches(b: Dict, half: Optional[Sequence[int]]) -> List[int]:
     out = []
     for vi, m in enumerate(b['midi']):
         h = half[vi]
-        if (b['rel'][vi] not in b['members'] and 1 <= abs(h - m) <= 2
+        if (b['rel'][vi] not in b['members'] and 1 <= abs(h - m) <= rule_dsl.structural_step()
                 and (b['rel'][vi] + h - m) % 12 in b['members']):
             out.append(h)
         else:
@@ -66,7 +60,7 @@ def structural_pitches(b: Dict, half: Optional[Sequence[int]]) -> List[int]:
 
 
 def check_satb(grid: List[Tuple[float, List[int]]], beats: List[Dict],
-               ranges: Dict[str, Dict[str, int]], tb_max: int = 19,
+               ranges: Dict[str, Dict[str, int]], tb_max: Optional[int] = None,
                refined: bool = True) -> List[Dict]:
     """成品检查。
 
@@ -88,9 +82,12 @@ def check_satb(grid: List[Tuple[float, List[int]]], beats: List[Dict],
     def chord_of(t: float):
         return chord_at.get(t, chord_at.get(t - 0.5))
 
-    if refined:
+    use_struct = refined and rule_dsl.structural_on()
+    if use_struct:
         struct = {b['t']: structural_pitches(b, half_of(b)) for b in beats}
         grid = [(t, struct.get(t, v)) for t, v in grid]
+    else:
+        struct = {b['t']: list(b['midi']) for b in beats}
 
     # R01 / R02：相邻八分点 + 相邻拍点
     def scan(points):
@@ -102,11 +99,15 @@ def check_satb(grid: List[Tuple[float, List[int]]], beats: List[Dict],
                                        f'{"五" if (v2[i] - v2[j]) % 12 == 7 else "八"}度'})
             if hidden_perfect_outer(v1[0], v1[3], v2[0], v2[3]):
                 same_chord = chord_of(t1) is not None and chord_of(t1) == chord_of(t2)
-                if refined and (same_chord or (v1[3] - v2[3]) % 12 == 0):
+                skip_same = refined and rule_dsl.has_exception('R02', '同一和弦内换位') and same_chord
+                skip_oct = (refined and rule_dsl.has_exception('R02', '低音八度移位')
+                            and (v1[3] - v2[3]) % 12 == 0)
+                if skip_same or skip_oct:
                     continue
-                out.append({'rule': 'R02', 't': t2, 'msg': '外声部隐伏五/八度'})
+                out.append({'rule': 'R02', 't': t2,
+                            'msg': rule_dsl.get('R02').get('报告', '外声部隐伏五/八度')})
     scan(grid)
-    beat_pts = [(b['t'], struct[b['t']] if refined else b['midi']) for b in beats]
+    beat_pts = [(b['t'], struct[b['t']] if use_struct else b['midi']) for b in beats]
     seen = {(o['rule'], o['t'], o['msg']) for o in out}
     before = len(out)
     scan(beat_pts)
@@ -115,61 +116,63 @@ def check_satb(grid: List[Tuple[float, List[int]]], beats: List[Dict],
     hi = {k: v['high'] for k, v in ranges.items()}
     for k, b in enumerate(beats):
         v = b['midi']
-        if not spacing_ok(v, tb_max):
-            out.append({'rule': 'R03/R04', 't': b['t'], 'msg': f'交叉或间距过大 {v}'})
+        if rule_dsl.spacing_violation(v, tb_max):
+            label = rule_dsl.get('R04').get('报告编号', 'R03/R04')
+            out.append({'rule': label, 't': b['t'], 'msg': f'交叉或间距过大 {v}'})
         for vi, nm in enumerate('SATB'):
-            if not lo[nm] <= v[vi] <= hi[nm]:
+            if rule_dsl.out_of_range(v[vi], lo[nm], hi[nm]):
                 out.append({'rule': 'R05', 't': b['t'], 'msg': f'{VOICE_NAMES[vi]}出音域 {v[vi]}'})
         if k and not b.get('phrase_start'):
             pb = beats[k - 1]
             pv = pb['midi']
             ph = half_of(pb)
-            if (_overlap_refined(pv, ph, v) if refined else overlap(pv, v)):
-                out.append({'rule': 'R03', 't': b['t'], 'msg': '声部超越'})
+            hit = (rule_dsl.overlap_refined(pv, v, ph) if refined else overlap(pv, v))
+            if hit:
+                out.append({'rule': 'R03', 't': b['t'],
+                            'msg': rule_dsl.get('R03').get('报告', '声部超越')})
             nxt = _next_note(beats, k, half_of(b))
             for vi in range(4):
                 if bad_melodic(pv[vi], v[vi]):
-                    if refined and _tritone_recovered(pv[vi], v[vi], nxt[vi]):
+                    if refined and rule_dsl.tritone_recovered(pv[vi], v[vi], nxt[vi]):
                         continue
                     out.append({'rule': 'R08', 't': b['t'],
                                 'msg': f'{VOICE_NAMES[vi]}不良旋律音程 {v[vi] - pv[vi]:+d}'})
-            # R06：外声部导音解决
+            # R06：外声部导音解决，声部与上行半音数来自定义文件
+            r06_voices = rule_dsl.voices_of('R06')
             if pb.get('lt_pc') is not None and b.get('tonic_chord'):
-                for vi in (0, 3):
-                    if pb['rel'][vi] == pb['lt_pc'] and v[vi] - pv[vi] != 1:
+                for vi in r06_voices:
+                    if rule_dsl.leading_unresolved(pb['rel'][vi] == pb['lt_pc'], v[vi] - pv[vi]):
                         out.append({'rule': 'R06', 't': b['t'],
                                     'msg': f'{VOICE_NAMES[vi]}导音未上行解决'})
-            elif refined:
+            elif refined and rule_dsl.has_exception('R06', '副导音同样须上行半音'):
                 slt = _secondary_lt(pb, b)
                 if slt is not None:
-                    for vi in (0, 3):
-                        if pb['rel'][vi] == slt and v[vi] - pv[vi] != 1:
+                    for vi in r06_voices:
+                        if rule_dsl.leading_unresolved(pb['rel'][vi] == slt, v[vi] - pv[vi]):
                             out.append({'rule': 'R06', 't': b['t'],
                                         'msg': f'{VOICE_NAMES[vi]}副导音未上行解决'})
-            # R07：七音解决
+            # R07：七音解决，下行半音数来自定义文件
             if pb.get('seventh_pc') is not None:
                 pp = beats[k - 2]['midi'] if k >= 2 and not pb.get('phrase_start') else None
                 hb = half_of(b)
                 for vi in range(4):
-                    if pb['rel'][vi] == pb['seventh_pc']:
-                        d = v[vi] - pv[vi]
-                        if d in (-1, -2) or (d == 0 and b['rel'][vi] in b['members']):
-                            continue
-                        if refined and _seventh_licensed(vi, pv, v, ph, hb, pp):
-                            continue
-                        out.append({'rule': 'R07', 't': b['t'],
-                                    'msg': f'{VOICE_NAMES[vi]}七音未级进下行解决'})
+                    held = b['rel'][vi] in b['members']
+                    if not rule_dsl.seventh_unresolved(
+                            pb['rel'][vi] == pb['seventh_pc'], v[vi] - pv[vi], held):
+                        continue
+                    if refined and _seventh_licensed(vi, pv, v, ph, hb, pp):
+                        continue
+                    out.append({'rule': 'R07', 't': b['t'],
+                                'msg': f'{VOICE_NAMES[vi]}七音未级进下行解决'})
         # R09：导音不重复 / 完整性
         rel = b['rel']
-        if refined:
+        if use_struct:
             tpc = (b['midi'][3] - b['rel'][3]) % 12
             rel = [(m - tpc) % 12 for m in struct[b['t']]]
-        if b.get('lt_pc') is not None and rel.count(b['lt_pc']) > 1:
-            out.append({'rule': 'R09', 't': b['t'], 'msg': '导音重复'})
         roles = {b['members'].get(r) for r in rel}
-        need = {'R', '3'} | ({'7'} if b.get('is_seventh') else set())
-        if not need <= roles:
-            out.append({'rule': 'R09', 't': b['t'], 'msg': f'和弦不完整（缺 {sorted(need - roles)}）'})
+        lt_count = rel.count(b['lt_pc']) if b.get('lt_pc') is not None else 0
+        for msg in rule_dsl.chord_faults(lt_count, roles, bool(b.get('is_seventh'))):
+            out.append({'rule': 'R09', 't': b['t'], 'msg': msg})
     return out
 
 
@@ -187,14 +190,7 @@ REFINEMENTS = {
 
 def _overlap_refined(prev: Sequence[int], prev_half: Optional[Sequence[int]],
                      cur: Sequence[int]) -> bool:
-    last = prev_half if prev_half is not None else prev
-    for i in range(3):
-        if prev[i] == prev[i + 1]:
-            continue
-        if ((cur[i + 1] > prev[i] and cur[i + 1] > last[i])
-                or (cur[i] < prev[i + 1] and cur[i] < last[i + 1])):
-            return True
-    return False
+    return rule_dsl.overlap_refined(prev, cur, prev_half)
 
 
 def _next_note(beats: List[Dict], k: int, half: Optional[Sequence[int]]) -> List[Optional[int]]:
@@ -211,7 +207,7 @@ def _next_note(beats: List[Dict], k: int, half: Optional[Sequence[int]]) -> List
 
 
 def _tritone_recovered(a: int, b: int, nxt: Optional[int]) -> bool:
-    return b - a == -6 and nxt is not None and 1 <= nxt - b <= 2
+    return rule_dsl.tritone_recovered(a, b, nxt)
 
 
 def secondary_lt(root: Optional[int], quality: Optional[str], root_next: Optional[int],
@@ -236,16 +232,25 @@ def _secondary_lt(pb: Dict, b: Dict) -> Optional[int]:
 def _seventh_licensed(vi: int, pv: Sequence[int], v: Sequence[int],
                       ph: Optional[Sequence[int]], hb: Optional[Sequence[int]],
                       pp: Optional[Sequence[int]]) -> bool:
+    """R07 的放过条件。定义文件里没有的那一行，这里就不生效。"""
     s = pv[vi]
-    if ph is not None and ph[vi] - s in (-1, -2):
-        return True
-    if v[vi] == s and hb is not None and hb[vi] - s in (-1, -2):
-        return True
-    d = v[vi] - s
-    db = v[3] - pv[3]
-    if vi != 3 and d in (1, 2) and db in (1, 2) and (v[3] - s) % 12 in (11, 10):
-        return True
-    if pp is not None:
+    downs = rule_dsl.get('R07')['参数']['下行解决']
+    if isinstance(downs, int):
+        downs = [downs]
+    downs = set(downs)
+    ups = {-d for d in downs}
+    if rule_dsl.has_exception('R07', '后半拍级进下行'):
+        if ph is not None and ph[vi] - s in downs:
+            return True
+        if v[vi] == s and hb is not None and hb[vi] - s in downs:
+            return True
+    if rule_dsl.has_exception('R07', '七音随低音上行'):
+        d = v[vi] - s
+        db = v[3] - pv[3]
+        if vi != 3 and d in ups and db in ups and (v[3] - s) % 12 in (11, 10):
+            return True
+    if rule_dsl.has_exception('R07', '级进经过的七音') and pp is not None:
+        d = v[vi] - s
         d0 = s - pp[vi]
         if d0 * d > 0 and abs(d0) <= 2 and abs(d) <= 2:
             return True
