@@ -22,6 +22,7 @@
 | **钢琴大谱表** | 2 声部 Piano 自动合并为单 part 双谱表（`<staves>2</staves>` + 花括号） |
 | **可审计** | 记谱层 `RuleLog` 分规则计数；评估层三指标可量化风格契合度；提示词→乐谱→分析报告三方一致性测试 |
 | **零训练数据** | 规则/算法驱动 → 零版权风险、零幻觉、零不可复现 |
+| **MuseScore 插件** | 在 MuseScore Studio 4.4+ 内一键调用确定性 CLI 生成 MusicXML |
 
 ## 架构总览
 
@@ -75,6 +76,26 @@ start.bat
 ```bash
 python score_studio.py            # 图形界面
 python llm_compose.py             # 命令行会话（可选）
+python generate_score.py --pack chorale --bars 16 --out out.musicxml   # 单曲 MusicXML
+```
+
+### MuseScore Studio 插件
+
+在 [MuseScore Studio](https://musescore.org/) 4.4+（已在 4.7 验证）里直接生成乐谱：QML 薄插件负责参数与打开谱面，作曲仍走 ComposerChat 确定性命令行（`generate_score.py`）。
+
+**安装（Windows）**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\install_musescore_plugin.ps1
+```
+
+然后重启 MuseScore → **Home → Plugins** → 启用 **ComposerChat Generate** → **Plugins → Composing tools → ComposerChat Generate**。
+
+发布包见 [GitHub Releases](https://github.com/tyrone1979/scorestudio/releases) 标签 `musescore-plugin-v1.0.0`，源码目录为 [`musescore_plugin/`](musescore_plugin/README.md)。
+
+```bash
+python generate_score.py --list-packs
+python generate_score.py --pack waltz --bars 16 --seed demo --json
 ```
 
 ### 界面语言（中文 / English）
@@ -239,6 +260,9 @@ studio_daw.py         风格/体系浏览器组件
 skills/composition/   风格包 + 任务 Skill（真相源）
 score_learning/       语料 → Skill 学习
 tests/                内核/往返/帮助/报告一致性测试 + 编辑器自测
+generate_score.py     单曲 MusicXML/MIDI CLI（供 MuseScore 插件调用）
+musescore_plugin/     MuseScore Studio 4 QML 插件与说明
+scripts/install_musescore_plugin.ps1
 scripts/demos/        播放 / 写谱小示例（play_*、make_g_major_score）
 scripts/dev/          一次性维护与重放脚本（不被主程序引用）
 scripts/eval/         音色库对比、盲评材料导出、织体检查等评估脚本

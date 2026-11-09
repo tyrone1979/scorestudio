@@ -39,6 +39,12 @@ scores/llm_compose_state.json
 # 外部乐谱语料：machines can re-fetch it via `python -m score_learning fetch`,
 # 且多数源的许可禁止再分发 —— 入库的是「怎么再取一遍」，不是数据本身。
 scores/corpus/
+# MuseScore plugin local runtime (machine paths / request-response)
+musescore_plugin/ComposerChat/config.json
+musescore_plugin/ComposerChat/request.json
+musescore_plugin/ComposerChat/result.json
+scores/musescore_out/
+.tmp/
 # 风格包的逐曲特征（每首一个 JSON，近 2000 个 / 约 10MB）。纯中间产物：
 # `python -m score_learning mine --family X --pack-id Y` 一条命令即可重建，
 # 真正被内核消费的是同目录的 style_contract.yaml（几 KB）。

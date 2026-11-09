@@ -22,6 +22,7 @@ A PyQt5 workbench for **deterministic symbolic music composition**: describe a p
 | **Piano grand staff** | Two-voice piano is merged into one part with two staves (`<staves>2</staves>` + brace) |
 | **Auditable** | Per-rule counts in the notation `RuleLog`; three metrics quantify style fit; prompt → score → analysis-report consistency tests |
 | **No training data** | Rule/algorithm driven: no copyright risk, no hallucinated notes, nothing irreproducible |
+| **MuseScore plugin** | Generate a deterministic MusicXML from MuseScore Studio 4.4+ via a thin QML plugin + CLI |
 
 ## Architecture
 
@@ -75,6 +76,26 @@ Main entry point: `score_studio.py` (or `start.bat`). An LLM API is needed for c
 ```bash
 python score_studio.py            # GUI
 python llm_compose.py             # command-line session (optional)
+python generate_score.py --pack chorale --bars 16 --out out.musicxml   # one-shot MusicXML
+```
+
+### MuseScore Studio plugin
+
+Generate a score inside [MuseScore Studio](https://musescore.org/) 4.4+ (tested on 4.7) without leaving the editor. The plugin is a thin QML UI; composition still runs through ComposerChat’s deterministic CLI (`generate_score.py`).
+
+**Install (Windows)**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\install_musescore_plugin.ps1
+```
+
+Then restart MuseScore → **Home → Plugins** → enable **ComposerChat Generate** → **Plugins → Composing tools → ComposerChat Generate**.
+
+Release zip (plugin files + installer notes): see [GitHub Releases](https://github.com/tyrone1979/scorestudio/releases) tag `musescore-plugin-v1.0.0`, or the folder [`musescore_plugin/`](musescore_plugin/README.md) in this repo.
+
+```bash
+python generate_score.py --list-packs
+python generate_score.py --pack waltz --bars 16 --seed demo --json
 ```
 
 ### Interface language (中文 / English)
@@ -227,6 +248,9 @@ studio_daw.py         style/system browser widgets
 skills/composition/   style packs + task skills (source of truth)
 score_learning/       corpus → skill learning
 tests/                kernel / round-trip / help / report-consistency tests + editor self-test
+generate_score.py     one-shot MusicXML/MIDI CLI (used by the MuseScore plugin)
+musescore_plugin/     MuseScore Studio 4 QML plugin + install notes
+scripts/install_musescore_plugin.ps1
 scripts/demos/        small playback and score-writing demos (play_*, make_g_major_score)
 scripts/dev/          one-off maintenance and replay scripts (not used by the app)
 scripts/eval/         soundfont comparison, blind-review export, texture checks
