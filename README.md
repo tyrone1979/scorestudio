@@ -3,8 +3,9 @@
 **English** | [中文](README.zh-CN.md)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![MuseScore plugin](https://img.shields.io/github/v/release/tyrone1979/scorestudio?filter=musescore-plugin-*&label=MuseScore%20plugin)](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0)
 
-Documentation: [rule and grammar inventory](RULES.md) · [reproducibility](REPRODUCIBILITY.md)
+Documentation: [rule and grammar inventory](RULES.md) · [reproducibility](REPRODUCIBILITY.md) · [MuseScore plugin release](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0)
 
 A PyQt5 workbench for **deterministic symbolic music composition**: describe a piece in natural language (or use purely deterministic commands) and get an **editable score**. Every step is rule-checked, every note is reproducible, the generation process is auditable, and no training data is required.
 
@@ -83,15 +84,28 @@ python generate_score.py --pack chorale --bars 16 --out out.musicxml   # one-sho
 
 Generate a score inside [MuseScore Studio](https://musescore.org/) 4.4+ (tested on 4.7) without leaving the editor. The plugin is a thin QML UI; composition still runs through ComposerChat’s deterministic CLI (`generate_score.py`).
 
-**Install (Windows)**
+#### Release: [`musescore-plugin-v1.0.0`](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0)
+
+| Item | Link / path |
+|------|-------------|
+| Release page | https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0 |
+| Plugin zip | `ComposerChat-MuseScore-Plugin-v1.0.0.zip` (Assets on the release page) |
+| Source in repo | [`musescore_plugin/`](musescore_plugin/README.md) · installer [`scripts/install_musescore_plugin.ps1`](scripts/install_musescore_plugin.ps1) |
+| One-shot CLI | [`generate_score.py`](generate_score.py) |
+
+**Install from the release (Windows)**
+
+1. Download `ComposerChat-MuseScore-Plugin-v1.0.0.zip` from the [release Assets](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0).
+2. Keep a full Score Studio checkout with a working venv (`pip install -r requirements.txt`).
+3. From the repo root:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\install_musescore_plugin.ps1
 ```
 
-Then restart MuseScore → **Home → Plugins** → enable **ComposerChat Generate** → **Plugins → Composing tools → ComposerChat Generate**.
+Or copy the zip’s `ComposerChat/` folder into `%USERPROFILE%\Documents\MuseScore4\Plugins\` and create `config.json` from `config.example.json`.
 
-Release zip (plugin files + installer notes): see [GitHub Releases](https://github.com/tyrone1979/scorestudio/releases) tag `musescore-plugin-v1.0.0`, or the folder [`musescore_plugin/`](musescore_plugin/README.md) in this repo.
+4. Restart MuseScore → **Home → Plugins** → enable **ComposerChat Generate** → **Plugins → Composing tools → ComposerChat Generate**.
 
 ```bash
 python generate_score.py --list-packs

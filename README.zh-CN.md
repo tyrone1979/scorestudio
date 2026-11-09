@@ -3,8 +3,9 @@
 [English](README.md) | **中文**
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![MuseScore plugin](https://img.shields.io/github/v/release/tyrone1979/scorestudio?filter=musescore-plugin-*&label=MuseScore%20plugin)](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0)
 
-文档：[规则与语法总目录](RULES.md) · [可复现说明](REPRODUCIBILITY.md)
+文档：[规则与语法总目录](RULES.md) · [可复现说明](REPRODUCIBILITY.md) · [MuseScore 插件 Release](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0)
 
 基于 PyQt5 的**确定性符号音乐创作工作台**：用自然语言（或纯确定性命令）生成**可编辑乐谱**，全程规则校验、逐音符可复现、生成过程可审计、零训练数据。
 
@@ -83,15 +84,28 @@ python generate_score.py --pack chorale --bars 16 --out out.musicxml   # 单曲 
 
 在 [MuseScore Studio](https://musescore.org/) 4.4+（已在 4.7 验证）里直接生成乐谱：QML 薄插件负责参数与打开谱面，作曲仍走 ComposerChat 确定性命令行（`generate_score.py`）。
 
-**安装（Windows）**
+#### Release：[`musescore-plugin-v1.0.0`](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0)
+
+| 项目 | 链接 / 路径 |
+|------|-------------|
+| Release 页面 | https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0 |
+| 插件 zip | `ComposerChat-MuseScore-Plugin-v1.0.0.zip`（Release 页 Assets） |
+| 仓库源码 | [`musescore_plugin/`](musescore_plugin/README.md) · 安装脚本 [`scripts/install_musescore_plugin.ps1`](scripts/install_musescore_plugin.ps1) |
+| 单曲 CLI | [`generate_score.py`](generate_score.py) |
+
+**从 Release 安装（Windows）**
+
+1. 在 [Release Assets](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0) 下载 `ComposerChat-MuseScore-Plugin-v1.0.0.zip`。
+2. 本机需有完整 Score Studio 仓库与可用 venv（`pip install -r requirements.txt`）。
+3. 在仓库根目录执行：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\install_musescore_plugin.ps1
 ```
 
-然后重启 MuseScore → **Home → Plugins** → 启用 **ComposerChat Generate** → **Plugins → Composing tools → ComposerChat Generate**。
+或将 zip 内 `ComposerChat/` 复制到 `%USERPROFILE%\Documents\MuseScore4\Plugins\`，再按 `config.example.json` 写好 `config.json`。
 
-发布包见 [GitHub Releases](https://github.com/tyrone1979/scorestudio/releases) 标签 `musescore-plugin-v1.0.0`，源码目录为 [`musescore_plugin/`](musescore_plugin/README.md)。
+4. 重启 MuseScore → **Home → Plugins** → 启用 **ComposerChat Generate** → **Plugins → Composing tools → ComposerChat Generate**。
 
 ```bash
 python generate_score.py --list-packs

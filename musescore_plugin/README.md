@@ -2,8 +2,8 @@
 
 Generate a deterministic MusicXML score from [MuseScore Studio](https://musescore.org/) 4.4+ (tested on 4.7) by calling ComposerChat’s CLI.
 
-Release asset: [musescore-plugin-v1.0.0](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0)  
-(`ComposerChat-MuseScore-Plugin-v1.0.0.zip`)
+**Release:** [musescore-plugin-v1.0.0](https://github.com/tyrone1979/scorestudio/releases/tag/musescore-plugin-v1.0.0)  
+Download asset: `ComposerChat-MuseScore-Plugin-v1.0.0.zip` (see the release **Assets** section).
 
 ## Architecture
 
