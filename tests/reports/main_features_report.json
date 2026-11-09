@@ -1,0 +1,169 @@
+{
+  "when": "2026-11-09 09:21:35",
+  "passed": 23,
+  "failed": 0,
+  "total": 23,
+  "results": [
+    {
+      "section": "Handwritten rules DSL",
+      "name": "R01–R11 present",
+      "ok": true,
+      "detail": "12 rules + shared",
+      "shot": ""
+    },
+    {
+      "section": "Handwritten rules DSL",
+      "name": "shared suspension rule",
+      "ok": true,
+      "detail": "",
+      "shot": ""
+    },
+    {
+      "section": "Handwritten rules DSL",
+      "name": "English must-lines for R01",
+      "ok": true,
+      "detail": "the upper voice moves",
+      "shot": ""
+    },
+    {
+      "section": "Handwritten rules DSL",
+      "name": "cadence lock defaults",
+      "ok": true,
+      "detail": "beats=3 soprano=2",
+      "shot": ""
+    },
+    {
+      "section": "Handwritten rules DSL",
+      "name": "parallel fifth detection",
+      "ok": true,
+      "detail": "",
+      "shot": ""
+    },
+    {
+      "section": "Handwritten rules DSL",
+      "name": "spacing allows unison",
+      "ok": true,
+      "detail": "",
+      "shot": ""
+    },
+    {
+      "section": "Handwritten rules DSL",
+      "name": "spacing rejects crossing",
+      "ok": true,
+      "detail": "",
+      "shot": ""
+    },
+    {
+      "section": "Handwritten rules DSL",
+      "name": "editing the leap limit changes R02",
+      "ok": true,
+      "detail": "",
+      "shot": ""
+    },
+    {
+      "section": "Compose and check",
+      "name": "grammar.yaml loads",
+      "ok": true,
+      "detail": "grammar.yaml",
+      "shot": ""
+    },
+    {
+      "section": "Compose and check",
+      "name": "major draft has zero violations",
+      "ok": true,
+      "detail": "violations=0",
+      "shot": ""
+    },
+    {
+      "section": "Compose and check",
+      "name": "major draft has beats and phrases",
+      "ok": true,
+      "detail": "beats=48 phrases=6",
+      "shot": ""
+    },
+    {
+      "section": "Compose and check",
+      "name": "same seed is identical",
+      "ok": true,
+      "detail": "",
+      "shot": ""
+    },
+    {
+      "section": "Compose and check",
+      "name": "minor draft has zero violations",
+      "ok": true,
+      "detail": "violations=0",
+      "shot": ""
+    },
+    {
+      "section": "Compose and check",
+      "name": "each beat names a learned rule",
+      "ok": true,
+      "detail": "",
+      "shot": ""
+    },
+    {
+      "section": "Interface language",
+      "name": "English default",
+      "ok": true,
+      "detail": "en",
+      "shot": ""
+    },
+    {
+      "section": "Interface language",
+      "name": "Help menu translates",
+      "ok": true,
+      "detail": "'Help' / '帮助'",
+      "shot": ""
+    },
+    {
+      "section": "UI",
+      "name": "load sample MusicXML",
+      "ok": true,
+      "detail": "pirate_storm_allegro.xml; measures=32; title='怒海快板'",
+      "shot": ""
+    },
+    {
+      "section": "UI",
+      "name": "main window screenshot",
+      "ok": true,
+      "detail": "201572 bytes",
+      "shot": "../screenshots/main_features/01_main_window.png"
+    },
+    {
+      "section": "UI",
+      "name": "Help menu lists Handwritten rules",
+      "ok": true,
+      "detail": "帮助文档（完整 · 每条带示例）, 查看单项说明（命令/功能）…, 设计理念 · 护城河, 编辑教程 · 莫扎特小夜曲（16小节）, Handwritten rules, , 专业文档（命令/功能实测验证版）",
+      "shot": ""
+    },
+    {
+      "section": "UI",
+      "name": "handwritten rules window screenshot",
+      "ok": true,
+      "detail": "264204 bytes",
+      "shot": "../screenshots/main_features/02_handwritten_rules.png"
+    },
+    {
+      "section": "UI",
+      "name": "Language menu present",
+      "ok": true,
+      "detail": "中文, English",
+      "shot": ""
+    },
+    {
+      "section": "UI",
+      "name": "Chinese UI screenshot",
+      "ok": true,
+      "detail": "201572 bytes",
+      "shot": "../screenshots/main_features/03_main_window_zh.png"
+    },
+    {
+      "section": "UI",
+      "name": "Help menu screenshot",
+      "ok": true,
+      "detail": "179587 bytes",
+      "shot": "../screenshots/main_features/04_help_menu.png"
+    }
+  ]
+}

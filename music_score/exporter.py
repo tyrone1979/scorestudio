@@ -75,16 +75,31 @@ def _attach_marks(el, marks, is_chord: bool):
     from music21 import expressions as E
     art_cls = {'staccato': A.Staccato, 'staccatissimo': A.Staccatissimo,
                'accent': A.Accent, 'marcato': A.StrongAccent, 'tenuto': A.Tenuto,
-               'breath': A.BreathMark}
+               'portato': A.DetachedLegato, 'breath': A.BreathMark}
     exp_cls = {'fermata': E.Fermata, 'trill': E.Trill, 'mordent': E.Mordent,
                'inverted_mordent': E.InvertedMordent, 'turn': E.Turn}
     for mk in marks or []:
         if mk in art_cls:
-            el.articulations.append(art_cls[mk]())
+            try:
+                el.articulations.append(art_cls[mk]())
+            except Exception:
+                pass
         elif mk in exp_cls:
             el.expressions.append(exp_cls[mk]())
         elif mk == 'arpeggio' and is_chord:
             el.expressions.append(E.ArpeggioMark())
+        elif mk == 'caesura':
+            try:
+                el.expressions.append(E.Caesura())
+            except Exception:
+                pass
+        elif isinstance(mk, str) and mk.startswith('finger:'):
+            try:
+                from music21 import articulations as _A
+                fing = _A.Fingering(mk.split(':', 1)[1])
+                el.articulations.append(fing)
+            except Exception:
+                pass
 
 
 def _build_element(n):

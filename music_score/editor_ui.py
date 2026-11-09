@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QFont
+
+from .fonts import music_ui_font
 from PyQt5.QtWidgets import (
     QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton,
     QCheckBox, QFrame, QScrollArea, QGridLayout, QToolButton, QLineEdit,
@@ -18,23 +20,23 @@ from PyQt5.QtWidgets import (
 
 from .models import (
     NoteDuration, Accidental,
-    ARTICULATION_MARKS, ORNAMENT_MARKS, OTHER_MARKS,
+    ARTICULATION_MARKS, ORNAMENT_MARKS, FINGER_MARKS,
 )
 
 
 _TOOLS = [
     ('select', '✥', '选择（Esc）· 拖拽改音高 · 方向键微调'),
-    ('note', '♪', '音符输入（N）· 点击谱表插入'),
+    ('note', '♩', '音符输入（N）· 点击谱表插入'),
     ('rest', '𝄽', '休止符 · 点击谱表插入'),
     ('erase', '⌫', '擦除 · 点击删除音符'),
 ]
 _DURATIONS = [
     ('𝅝', NoteDuration.WHOLE, '全音符（1）'),
-    ('𝅗𝅥', NoteDuration.HALF, '二分音符（2）'),
+    ('𝅗𝅥', NoteDuration.HALF, '二分音符（2）'),
     ('♩', NoteDuration.QUARTER, '四分音符（3）'),
     ('♪', NoteDuration.EIGHTH, '八分音符（4）'),
-    ('𝅘𝅥𝅯', NoteDuration.SIXTEENTH, '十六分音符（5）'),
-    ('𝅘𝅥𝅰', NoteDuration.THIRTY_SECOND, '三十二分音符（6）'),
+    ('𝅘𝅥𝅯', NoteDuration.SIXTEENTH, '十六分音符（5）'),
+    ('𝅘𝅥𝅰', NoteDuration.THIRTY_SECOND, '三十二分音符（6）'),
 ]
 _ACCIDENTALS = [
     ('♮', Accidental.NATURAL, '还原（0 / =）'),
@@ -50,13 +52,27 @@ _MARK_LABELS = {
     'accent': ('>', 'Accent 重音'),
     'marcato': ('^', 'Marcato'),
     'tenuto': ('–', 'Tenuto 保持'),
+    'portato': ('–·', 'Portato 半跳音'),
     'fermata': ('𝄐', 'Fermata 延长'),
     'trill': ('tr', 'Trill 颤音'),
     'mordent': ('m', 'Mordent 波音'),
     'inverted_mordent': ('inv', '逆波音'),
     'turn': ('∾', 'Turn 回音'),
-    'arpeggio': ('⫽', 'Arpeggio 琶音'),
-    'breath': ('\'', 'Breath 换气'),
+    'arpeggio': ('⫻', 'Arpeggio 琶音'),
+    'breath': (',', 'Breath 换气'),
+    'caesura': ('//', 'Caesura 呼吸停顿'),
+    'tremolo': ('/}', 'Tremolo 震音'),
+    'tremolo2': ('//} ', 'Tremolo 双杠'),
+    'glissando': ('∿', 'Glissando 滑音'),
+    'ottava_8va': ('8va', 'Ottava 高八度'),
+    'ottava_8vb': ('8vb', 'Ottava 低八度'),
+    'pedal': ('Ped.', 'Pedal 踏板踩下'),
+    'pedal_up': ('*', 'Pedal 踏板抬起'),
+    'finger:1': ('1', '指法 1'),
+    'finger:2': ('2', '指法 2'),
+    'finger:3': ('3', '指法 3'),
+    'finger:4': ('4', '指法 4'),
+    'finger:5': ('5', '指法 5'),
 }
 
 
@@ -70,13 +86,39 @@ def _mark_items(mark_ids):
 
 _ARTICULATION_ITEMS = _mark_items(ARTICULATION_MARKS)
 _ORNAMENT_ITEMS = _mark_items(ORNAMENT_MARKS)
-_OTHER_ITEMS = _mark_items(OTHER_MARKS)
+_BREATH_ITEMS = _mark_items(('fermata', 'breath', 'caesura'))
+_ARPEGGIO_ITEMS = _mark_items(('arpeggio', 'glissando'))
+_TREMOLO_ITEMS = _mark_items(('tremolo', 'tremolo2'))
+_FINGER_ITEMS = _mark_items(FINGER_MARKS)
+_GRACE_ITEMS = [
+    ('grace_appog', '♪', 'Appoggiatura 长倚音'),
+    ('grace_acciac', '♮♪', 'Acciaccatura 短倚音'),
+    ('grace', '♫', 'Grace 倚音'),
+]
 _LINE_ITEMS = [
     ('tie', '⌒', '延音线 Tie（T）'),
     ('slur', '⌢', '连音线 Slur'),
     ('crescendo', '<', '渐强 Hairpin'),
     ('diminuendo', '>', '渐弱 Hairpin'),
-    ('grace', '𝅘𝅥𝅮', '倚音 Grace'),
+    ('ottava_8va', '8va', '高八度线 Ottava'),
+    ('ottava_8vb', '8vb', '低八度线 Ottava'),
+    ('pedal', 'Ped.', '踏板踩下'),
+    ('pedal_up', '*', '踏板抬起'),
+    ('glissando', '∿', '滑音 Glissando'),
+]
+_VOLTA_ITEMS = [
+    ('volta:1', '1.', '房子号 1.'),
+    ('volta:2', '2.', '房子号 2.'),
+    ('volta:1,2', '1,2', '房子号 1,2'),
+    ('volta:', '×', '清除房子号'),
+]
+_REST_ITEMS = [
+    ('rest:WHOLE', '𝄻', '全休止符'),
+    ('rest:HALF', '𝄼', '二分休止符'),
+    ('rest:QUARTER', '𝄽', '四分休止符'),
+    ('rest:EIGHTH', '𝄾', '八分休止符'),
+    ('rest:SIXTEENTH', '𝄿', '十六分休止符'),
+    ('rest:THIRTY_SECOND', '32', '三十二分休止符'),
 ]
 _TUPLET_ITEMS = [
     ('tuplet3', '3', '三连音 3:2'),
@@ -86,15 +128,35 @@ _TUPLET_ITEMS = [
 ]
 _BARLINE_ITEMS = [
     ('bar:regular', '|', '单小节线'),
-    ('bar:double', '∥', '复纵线 Double'),
-    ('bar:final', '∥·', '终止线 Final'),
+    ('bar:double', '‖', '复纵线 Double'),
+    ('bar:final', '‖·', '终止线 Final'),
     ('bar:dashed', '·|·', '虚线 Dashed'),
     ('bar:repeat_start', '𝄆', '反复开始'),
     ('bar:repeat_end', '𝄇', '反复结束'),
 ]
 _DYNAMICS = [
     'ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff',
-    'fp', 'sf', 'sfz', 'sfp', 'rf', 'fz',
+    'fp', 'sf', 'sfz', 'sfp', 'rf', 'rfz', 'fz', 'n',
+]
+_CHORD_ITEMS = [
+    ('chord:C', 'C', '和弦 C'),
+    ('chord:Am', 'Am', '和弦 Am'),
+    ('chord:G7', 'G7', '和弦 G7'),
+    ('chord:F', 'F', '和弦 F'),
+    ('chord:Dm', 'Dm', '和弦 Dm'),
+    ('chord:Em', 'Em', '和弦 Em'),
+    ('chord:', '×', '清除和弦记号'),
+]
+_TEXT_ITEMS = [
+    ('text:dolce', 'dolce', '表情 dolce'),
+    ('text:espressivo', 'espress.', '表情 espressivo'),
+    ('text:legato', 'legato', '表情 legato'),
+    ('text:cantabile', 'cantabile', '表情 cantabile'),
+    ('text:poco a poco', 'poco…', 'poco a poco'),
+]
+_LAYOUT_ITEMS = [
+    ('layout:system', '⏎', '换行 System break'),
+    ('layout:page', 'Pg', '换页 Page break'),
 ]
 _KEY_ITEMS = [
     ('key:0', 'C', 'C 大调 / a 小调'),
@@ -162,9 +224,7 @@ _JUMP_ITEMS = [
 ]
 
 
-_MUSIC_FONT = QFont('Noto Music')
-_MUSIC_FONT.setStyleHint(QFont.SansSerif)
-_MUSIC_FONT.setPointSize(13)
+_MUSIC_FONT = music_ui_font(18)
 
 
 def _flat_btn(text, tip, checkable=True, min_w=28):
@@ -343,8 +403,9 @@ class _PaletteSection(QWidget):
         g.setContentsMargins(4, 2, 4, 6)
         g.setSpacing(4)
         for i, (mid, label, tip) in enumerate(items):
-            b = _flat_btn(label, tip, checkable=False, min_w=36)
-            b.setFixedHeight(32)
+            b = _flat_btn(label, tip, checkable=False, min_w=44)
+            b.setFixedHeight(40)
+            b.setFont(_MUSIC_FONT)
             b.setProperty('paletteItemId', mid)
             b.setProperty('paletteSearchText', f'{title} {label} {tip} {mid}'.lower())
             b.clicked.connect(lambda _=False, m=mid: self.itemClicked.emit(m))
@@ -378,6 +439,7 @@ class ScorePalettePanel(QWidget):
     dynamicApplyRequested = pyqtSignal(str)
     accidentalChanged = pyqtSignal(object)
     durationChanged = pyqtSignal(object)
+    toolChanged = pyqtSignal(str)  # rest:… 等会切到休止符工具
     measureAttrRequested = pyqtSignal(str)
     addMeasuresRequested = pyqtSignal()
     addPartRequested = pyqtSignal()
@@ -416,22 +478,32 @@ class ScorePalettePanel(QWidget):
         bv.setSpacing(6)
         self._sections: list = []
 
+        # 分区对齐 MuseScore Studio 4 左侧 Palettes 常用项
         sections = [
+            ('Clefs', _CLEF_ITEMS, 3),
             ('Key signatures', _KEY_ITEMS, 3),
             ('Time signatures', _TIME_ITEMS, 3),
-            ('Clefs', _CLEF_ITEMS, 3),
+            ('Note durations', [(f'dur:{d.name}', lab, tip) for lab, d, tip in _DURATIONS], 3),
+            ('Rests', _REST_ITEMS, 3),
             ('Accidentals', [(f'acc:{a.name}', lab, tip) for lab, a, tip in _ACCIDENTALS], 3),
+            ('Grace notes', _GRACE_ITEMS, 3),
             ('Articulations', _ARTICULATION_ITEMS, 3),
             ('Ornaments', _ORNAMENT_ITEMS, 3),
+            ('Breaths & pauses', _BREATH_ITEMS, 3),
             ('Dynamics', [(f'dyn:{d}', d, f'Dynamic {d}') for d in _DYNAMICS], 3),
             ('Hairpins', _LINE_ITEMS[2:4], 2),
-            ('Lines', _LINE_ITEMS[:2] + _LINE_ITEMS[4:5], 2),
+            ('Lines', _LINE_ITEMS[:2] + _LINE_ITEMS[4:], 3),
+            ('Arpeggios & glissandi', _ARPEGGIO_ITEMS, 2),
+            ('Tremolos', _TREMOLO_ITEMS, 2),
+            ('Fingering', _FINGER_ITEMS, 5),
+            ('Voltas', _VOLTA_ITEMS, 4),
             ('Barlines', _BARLINE_ITEMS, 3),
             ('Tuplets', _TUPLET_ITEMS, 4),
             ('Tempo', _TEMPO_ITEMS, 3),
             ('Repeats & jumps', _JUMP_ITEMS, 3),
-            ('Note durations', [(f'dur:{d.name}', lab, tip) for lab, d, tip in _DURATIONS], 3),
-            ('Other', _OTHER_ITEMS, 2),
+            ('Chord symbols', _CHORD_ITEMS, 3),
+            ('Text', _TEXT_ITEMS, 2),
+            ('Layout', _LAYOUT_ITEMS, 2),
         ]
         for sec_title, items, cols in sections:
             sec = _PaletteSection(sec_title, items, cols=cols)
@@ -496,6 +568,12 @@ class ScorePalettePanel(QWidget):
                 self.durationChanged.emit(NoteDuration[mid[4:]])
             except KeyError:
                 pass
+        elif mid.startswith('rest:'):
+            try:
+                self.durationChanged.emit(NoteDuration[mid[5:]])
+            except KeyError:
+                pass
+            self.toolChanged.emit('rest')
         elif mid.startswith('acc:'):
             try:
                 self.accidentalChanged.emit(Accidental[mid[4:]])
@@ -503,9 +581,16 @@ class ScorePalettePanel(QWidget):
                 pass
         elif mid.startswith('bar:'):
             self.barlineRequested.emit(mid[4:])
-        elif mid.startswith(('key:', 'time:', 'clef:', 'tempo:', 'tempo_bpm:', 'text:', 'rehearsal:')):
+        elif mid.startswith(('key:', 'time:', 'clef:', 'tempo:', 'tempo_bpm:',
+                             'text:', 'rehearsal:', 'volta:', 'layout:')):
             self.measureAttrRequested.emit(mid)
-        elif mid.startswith('tuplet') or mid in ('tie', 'slur', 'crescendo', 'diminuendo', 'grace'):
+        elif mid.startswith('chord:'):
+            self.measureAttrRequested.emit(mid)
+        elif (mid.startswith('tuplet')
+              or mid.startswith('grace')
+              or mid in ('tie', 'slur', 'crescendo', 'diminuendo',
+                         'ottava_8va', 'ottava_8vb', 'pedal', 'pedal_up',
+                         'glissando', 'tremolo', 'tremolo2')):
             self.lineActionRequested.emit(mid)
         else:
             self.markToggled.emit(mid)
@@ -533,7 +618,7 @@ class SuggestionBar(QWidget):
 
         self._row1 = QHBoxLayout()
         self._row1.setSpacing(6)
-        self.title_label = QLabel('💡 可能性')
+        self.title_label = QLabel('可能性')
         self.title_label.setObjectName('sugTitle')
         self._row1.addWidget(self.title_label)
         self._variant_chips: list = []

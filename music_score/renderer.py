@@ -1129,6 +1129,11 @@ class ScoreRenderer:
                 box.setZValue(19)
                 self.scene.addItem(box)
             self._draw_volta(measure, x, y, width)
+            if getattr(measure, 'layout_break', None):
+                br = measure.layout_break
+                label = '⏎' if br == 'system' else '📄'
+                f = QFont("Segoe UI", 10)
+                self._text(label, x + width - 18, y - 18, f, QColor(90, 90, 90))
 
         # 力度记号（小节起始）：谱表下方，斜体粗体，音乐排版惯例
         if measure.dynamic:
@@ -1814,7 +1819,7 @@ class ScoreRenderer:
         hi = min(y - 10, top_y - 14, (tip_y - 8) if (stem_up and tip_y is not None) else 1e9)
         orn_k = 0
         for mk in note.marks:
-            if mk in ('staccato', 'staccatissimo', 'accent', 'tenuto', 'marcato'):
+            if mk in ('staccato', 'staccatissimo', 'accent', 'tenuto', 'marcato', 'portato'):
                 my = near + step * k
                 k += 1
                 if mk == 'staccato':
@@ -1846,11 +1851,17 @@ class ScoreRenderer:
                     it.setBrush(QBrush(Qt.NoBrush))
                     self.scene.addItem(it)
                     self._register_note_item(key, it, 'shape')
-                elif mk == 'tenuto':
+                elif mk in ('tenuto', 'portato'):
                     line = QGraphicsLineItem(x - 1, my, x + 11, my)
                     line.setPen(QPen(black, 2.0, Qt.SolidLine, Qt.RoundCap))
                     self.scene.addItem(line)
                     self._register_note_item(key, line, 'line')
+                    if mk == 'portato':
+                        dot = QGraphicsEllipseItem(cx - 2, my + (5 if above else -9), 4, 4)
+                        dot.setBrush(QBrush(black))
+                        dot.setPen(QPen(black, 0.5))
+                        self.scene.addItem(dot)
+                        self._register_note_item(key, dot, 'ellipse')
                 elif mk == 'marcato':
                     path = QPainterPath()
                     if above:
@@ -1889,6 +1900,45 @@ class ScoreRenderer:
                 f = QFont("Georgia", 16)
                 f.setBold(True)
                 self._text(",", x + NOTE_HEAD_WIDTH + 12, y - 2 * sp - 4, f, QColor(0, 0, 0))
+            elif mk == 'caesura':
+                f = QFont("Georgia", 14)
+                f.setBold(True)
+                self._text("//", x + NOTE_HEAD_WIDTH + 10, y - 2 * sp - 6, f, QColor(0, 0, 0))
+            elif mk in ('tremolo', 'tremolo2'):
+                strokes = 1 if mk == 'tremolo' else 2
+                base = (tip_y if tip_y is not None else y) + (8 if stem_up else -8)
+                for i in range(strokes):
+                    yy = base + i * 5 * (1 if stem_up else -1)
+                    line = QGraphicsLineItem(cx - 6, yy - 2, cx + 6, yy + 2)
+                    line.setPen(QPen(black, 2.0, Qt.SolidLine, Qt.RoundCap))
+                    self.scene.addItem(line)
+                    self._register_note_item(key, line, 'line')
+            elif mk == 'glissando':
+                line = QGraphicsLineItem(x + NOTE_HEAD_WIDTH + 2, y, x + NOTE_HEAD_WIDTH + 22, y - 10)
+                line.setPen(QPen(black, 1.4, Qt.DashLine, Qt.RoundCap))
+                self.scene.addItem(line)
+                self._register_note_item(key, line, 'line')
+            elif mk in ('ottava_8va', 'ottava_8vb'):
+                oy = hi - 11 * orn_k
+                orn_k += 1
+                label = '8va' if mk == 'ottava_8va' else '8vb'
+                f = QFont("Georgia", 10)
+                f.setItalic(True)
+                self._text(label, cx - 10, oy - 10, f, QColor(0, 0, 0))
+                line = QGraphicsLineItem(cx + 12, oy - 2, cx + 36, oy - 2)
+                line.setPen(QPen(black, 1.0, Qt.DashLine))
+                self.scene.addItem(line)
+                self._register_note_item(key, line, 'line')
+            elif mk in ('pedal', 'pedal_up'):
+                oy = bot_y + 18
+                label = 'Ped.' if mk == 'pedal' else '*'
+                f = QFont("Georgia", 11)
+                f.setItalic(mk == 'pedal')
+                self._text(label, x - 2, oy, f, QColor(0, 0, 0))
+            elif isinstance(mk, str) and mk.startswith('finger:'):
+                f = QFont("Georgia", 9)
+                self._text(mk.split(':', 1)[1], cx - 3, top_y - 16 - 10 * orn_k, f, QColor(0, 0, 0))
+                orn_k += 1
 
     def _draw_ornament(self, mk: str, cx: float, oy: float, key):
         black = Qt.GlobalColor.black

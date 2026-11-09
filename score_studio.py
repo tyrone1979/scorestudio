@@ -378,7 +378,7 @@ _APP_STYLESHEET = """
     #scorePalettePanel QCheckBox::indicator:checked { background-color:#ff8c1a; border-color:#ff8c1a; }
     #editPalette QPushButton { background-color:#26282e; color:#cfd3da;
         border:1px solid #34373f; border-radius:4px; padding:2px 8px; font-size:14px;
-        font-family:'Noto Music','Apple Symbols','Segoe UI Symbol',PingFang SC,sans-serif; }
+        font-family:'Segoe UI Symbol','Apple Symbols','Noto Music',PingFang SC,sans-serif; }
     #editPalette QPushButton:hover { background-color:#31343c; border-color:#3f434d; }
     #editPalette QPushButton:checked { background-color:#ff8c1a; color:#15161a;
         border-color:#ff8c1a; font-weight:bold; }
@@ -394,8 +394,8 @@ _APP_STYLESHEET = """
     #scorePalettePanel QToolButton#paletteSectionHdr { color:#ff8c1a; font-size:12px;
         font-weight:bold; background:transparent; border:none; text-align:left; padding:4px 6px; }
     #scorePalettePanel QPushButton { background-color:#26282e; color:#cfd3da;
-        border:1px solid #34373f; border-radius:4px; padding:2px 4px; font-size:13px;
-        font-family:'Noto Music','Apple Symbols','Segoe UI Symbol',PingFang SC,sans-serif; }
+        border:1px solid #34373f; border-radius:4px; padding:2px 4px; font-size:18px;
+        font-family:'Segoe UI Symbol','Apple Symbols','Noto Music',PingFang SC,sans-serif; }
     #scorePalettePanel QPushButton:hover { background-color:#31343c; border-color:#ff8c1a; color:#ff8c1a; }
     #scorePalettePanel QLabel#panelHint { color:#6a7078; font-size:11px; background:transparent; }
     #suggestionBar { background-color:#15161a; border-bottom:1px solid #2c2f36; }
@@ -6847,6 +6847,7 @@ class StudioWindow(QMainWindow):
         sp.dynamicApplyRequested.connect(self._on_edit_dynamic)
         sp.durationChanged.connect(self._on_edit_duration)
         sp.accidentalChanged.connect(self._on_edit_accidental)
+        sp.toolChanged.connect(self._on_edit_tool)
         sp.measureAttrRequested.connect(self._on_measure_attr)
         sp.addMeasuresRequested.connect(self._add_measures_dialog)
         sp.addPartRequested.connect(self._add_part_dialog)
@@ -7318,6 +7319,20 @@ class StudioWindow(QMainWindow):
             return
         if spec.startswith('rehearsal:'):
             c.set_rehearsal_mark(measures, spec[10:])
+            return
+        if spec.startswith('volta:'):
+            c.set_volta(measures, spec[6:])
+            return
+        if spec.startswith('layout:'):
+            c.set_layout_break(measures, spec[7:])
+            return
+        if spec.startswith('chord:'):
+            keys = list(self.view.selected_symbols)
+            if not keys:
+                self.statusBar().showMessage('先选中音符，再写和弦记号')
+                return
+            c.set_chord_symbol(keys, spec[6:])
+            return
 
     def _sync_palette_state(self, duration, accidental):
         """快捷键改变插入状态后，同步调色板按钮。"""
@@ -9298,6 +9313,11 @@ class StudioWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    try:
+        from music_score.fonts import ensure_music_fonts
+        ensure_music_fonts()
+    except Exception:
+        pass
     app.setWindowIcon(QIcon(os.path.join(_ROOT, "assets", "icon.svg")))
     i18n.set_language(i18n.initial_language(), persist=False)
     app._retranslator = i18n.Retranslator(app)

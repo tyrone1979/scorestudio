@@ -57,14 +57,20 @@ CLEF_BOTTOM_LINE = {
 }
 
 # 演奏法 / 装饰音 / 其它附在音符上的记号（Note.marks 取值）
+# 对齐 MuseScore Studio 4 左侧调色板常见项；fingering 用 finger:1..5。
 ARTICULATION_MARKS = ('staccato', 'staccatissimo', 'accent', 'marcato',
-                      'tenuto', 'fermata')
+                      'tenuto', 'portato', 'fermata')
 ORNAMENT_MARKS = ('trill', 'mordent', 'inverted_mordent', 'turn')
-OTHER_MARKS = ('arpeggio', 'breath')
-ALL_MARKS = ARTICULATION_MARKS + ORNAMENT_MARKS + OTHER_MARKS
+OTHER_MARKS = ('arpeggio', 'breath', 'caesura', 'tremolo', 'tremolo2',
+               'glissando', 'ottava_8va', 'ottava_8vb', 'pedal', 'pedal_up')
+FINGER_MARKS = ('finger:1', 'finger:2', 'finger:3', 'finger:4', 'finger:5')
+ALL_MARKS = ARTICULATION_MARKS + ORNAMENT_MARKS + OTHER_MARKS + FINGER_MARKS
 
 # 小节线样式（Measure.barline_right / barline_left）
 BARLINE_STYLES = ('regular', 'double', 'final', 'repeat_start', 'repeat_end', 'dashed')
+
+# 布局断点（Measure.layout_break）
+LAYOUT_BREAKS = ('system', 'page')
 
 
 class NoteDuration(Enum):
@@ -185,6 +191,7 @@ class Measure:
     barline_left: Optional[str] = None   # 'repeat_start'
     barline_right: Optional[str] = None  # 'double' / 'final' / 'repeat_end' / 'dashed'
     volta: Optional[str] = None       # 反复房子号：'1' / '2' / '1,2'
+    layout_break: Optional[str] = None  # 'system' / 'page'（对齐 MuseScore Layout）
     implicit: bool = False            # 弱起（不完整）小节：不按拍号补满、不算节奏错误
 
     def total_duration(self) -> float:

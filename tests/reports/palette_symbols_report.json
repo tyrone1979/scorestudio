@@ -1,0 +1,1083 @@
+{
+  "generated": "2026-11-09T10:13:46",
+  "total": 153,
+  "passed": 153,
+  "failed": 0,
+  "results": [
+    {
+      "section": "Clefs",
+      "id": "clef:TREBLE",
+      "label": "G",
+      "ok": true,
+      "detail": "clef=ClefType.TREBLE"
+    },
+    {
+      "section": "Clefs",
+      "id": "clef:BASS",
+      "label": "F",
+      "ok": true,
+      "detail": "clef=ClefType.BASS"
+    },
+    {
+      "section": "Clefs",
+      "id": "clef:ALTO",
+      "label": "C",
+      "ok": true,
+      "detail": "clef=ClefType.ALTO"
+    },
+    {
+      "section": "Clefs",
+      "id": "clef:TENOR",
+      "label": "Cten",
+      "ok": true,
+      "detail": "clef=ClefType.TENOR"
+    },
+    {
+      "section": "Clefs",
+      "id": "clef:TREBLE_8VB",
+      "label": "G8",
+      "ok": true,
+      "detail": "clef=ClefType.TREBLE_8VB"
+    },
+    {
+      "section": "Clefs",
+      "id": "clef:BASS_8VB",
+      "label": "F8",
+      "ok": true,
+      "detail": "clef=ClefType.BASS_8VB"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:0",
+      "label": "C",
+      "ok": true,
+      "detail": "key.sharps=0"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:1",
+      "label": "G",
+      "ok": true,
+      "detail": "key.sharps=1"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:2",
+      "label": "D",
+      "ok": true,
+      "detail": "key.sharps=2"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:3",
+      "label": "A",
+      "ok": true,
+      "detail": "key.sharps=3"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:4",
+      "label": "E",
+      "ok": true,
+      "detail": "key.sharps=4"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:5",
+      "label": "B",
+      "ok": true,
+      "detail": "key.sharps=5"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:6",
+      "label": "F#",
+      "ok": true,
+      "detail": "key.sharps=6"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:7",
+      "label": "C#",
+      "ok": true,
+      "detail": "key.sharps=7"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:-1",
+      "label": "F",
+      "ok": true,
+      "detail": "key.sharps=-1"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:-2",
+      "label": "Bb",
+      "ok": true,
+      "detail": "key.sharps=-2"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:-3",
+      "label": "Eb",
+      "ok": true,
+      "detail": "key.sharps=-3"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:-4",
+      "label": "Ab",
+      "ok": true,
+      "detail": "key.sharps=-4"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:-5",
+      "label": "Db",
+      "ok": true,
+      "detail": "key.sharps=-5"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:-6",
+      "label": "Gb",
+      "ok": true,
+      "detail": "key.sharps=-6"
+    },
+    {
+      "section": "Key signatures",
+      "id": "key:-7",
+      "label": "Cb",
+      "ok": true,
+      "detail": "key.sharps=-7"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:common",
+      "label": "C",
+      "ok": true,
+      "detail": "time=4/4 sym=common"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:cut",
+      "label": "¢",
+      "ok": true,
+      "detail": "time=2/2 sym=cut"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:4/4",
+      "label": "4/4",
+      "ok": true,
+      "detail": "time=4/4 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:3/4",
+      "label": "3/4",
+      "ok": true,
+      "detail": "time=3/4 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:2/4",
+      "label": "2/4",
+      "ok": true,
+      "detail": "time=2/4 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:6/8",
+      "label": "6/8",
+      "ok": true,
+      "detail": "time=6/8 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:9/8",
+      "label": "9/8",
+      "ok": true,
+      "detail": "time=9/8 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:12/8",
+      "label": "12/8",
+      "ok": true,
+      "detail": "time=12/8 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:2/2",
+      "label": "2/2",
+      "ok": true,
+      "detail": "time=2/2 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:3/8",
+      "label": "3/8",
+      "ok": true,
+      "detail": "time=3/8 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:5/4",
+      "label": "5/4",
+      "ok": true,
+      "detail": "time=5/4 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:6/4",
+      "label": "6/4",
+      "ok": true,
+      "detail": "time=6/4 sym=None"
+    },
+    {
+      "section": "Time signatures",
+      "id": "time:7/4",
+      "label": "7/4",
+      "ok": true,
+      "detail": "time=7/4 sym=None"
+    },
+    {
+      "section": "Note durations",
+      "id": "dur:WHOLE",
+      "label": "1",
+      "ok": true,
+      "detail": "ctrl=NoteDuration.WHOLE note=NoteDuration.THIRTY_SECOND"
+    },
+    {
+      "section": "Note durations",
+      "id": "dur:HALF",
+      "label": "1/2",
+      "ok": true,
+      "detail": "ctrl=NoteDuration.HALF note=NoteDuration.THIRTY_SECOND"
+    },
+    {
+      "section": "Note durations",
+      "id": "dur:QUARTER",
+      "label": "1/4",
+      "ok": true,
+      "detail": "ctrl=NoteDuration.QUARTER note=NoteDuration.THIRTY_SECOND"
+    },
+    {
+      "section": "Note durations",
+      "id": "dur:EIGHTH",
+      "label": "1/8",
+      "ok": true,
+      "detail": "ctrl=NoteDuration.EIGHTH note=NoteDuration.THIRTY_SECOND"
+    },
+    {
+      "section": "Note durations",
+      "id": "dur:SIXTEENTH",
+      "label": "1/16",
+      "ok": true,
+      "detail": "ctrl=NoteDuration.SIXTEENTH note=NoteDuration.THIRTY_SECOND"
+    },
+    {
+      "section": "Note durations",
+      "id": "dur:THIRTY_SECOND",
+      "label": "1/32",
+      "ok": true,
+      "detail": "ctrl=NoteDuration.THIRTY_SECOND note=NoteDuration.THIRTY_SECOND"
+    },
+    {
+      "section": "Rests",
+      "id": "rest:WHOLE",
+      "label": "r1",
+      "ok": true,
+      "detail": "tool=rest duration=NoteDuration.WHOLE"
+    },
+    {
+      "section": "Rests",
+      "id": "rest:HALF",
+      "label": "r2",
+      "ok": true,
+      "detail": "tool=rest duration=NoteDuration.HALF"
+    },
+    {
+      "section": "Rests",
+      "id": "rest:QUARTER",
+      "label": "r4",
+      "ok": true,
+      "detail": "tool=rest duration=NoteDuration.QUARTER"
+    },
+    {
+      "section": "Rests",
+      "id": "rest:EIGHTH",
+      "label": "8th",
+      "ok": true,
+      "detail": "tool=rest duration=NoteDuration.EIGHTH"
+    },
+    {
+      "section": "Rests",
+      "id": "rest:SIXTEENTH",
+      "label": "16",
+      "ok": true,
+      "detail": "tool=rest duration=NoteDuration.SIXTEENTH"
+    },
+    {
+      "section": "Rests",
+      "id": "rest:THIRTY_SECOND",
+      "label": "32",
+      "ok": true,
+      "detail": "tool=rest duration=NoteDuration.THIRTY_SECOND"
+    },
+    {
+      "section": "Accidentals",
+      "id": "acc:NATURAL",
+      "label": "nat",
+      "ok": true,
+      "detail": "ctrl=Accidental.NATURAL note=None"
+    },
+    {
+      "section": "Accidentals",
+      "id": "acc:SHARP",
+      "label": "#",
+      "ok": true,
+      "detail": "ctrl=Accidental.SHARP note=None"
+    },
+    {
+      "section": "Accidentals",
+      "id": "acc:FLAT",
+      "label": "b",
+      "ok": true,
+      "detail": "ctrl=Accidental.FLAT note=None"
+    },
+    {
+      "section": "Accidentals",
+      "id": "acc:DOUBLE_SHARP",
+      "label": "##",
+      "ok": true,
+      "detail": "ctrl=Accidental.DOUBLE_SHARP note=None"
+    },
+    {
+      "section": "Accidentals",
+      "id": "acc:DOUBLE_FLAT",
+      "label": "bb",
+      "ok": true,
+      "detail": "ctrl=Accidental.DOUBLE_FLAT note=None"
+    },
+    {
+      "section": "Grace notes",
+      "id": "grace_appog",
+      "label": "app",
+      "ok": true,
+      "detail": "grace=True"
+    },
+    {
+      "section": "Grace notes",
+      "id": "grace_acciac",
+      "label": "acc",
+      "ok": true,
+      "detail": "grace=True"
+    },
+    {
+      "section": "Grace notes",
+      "id": "grace",
+      "label": "gr",
+      "ok": true,
+      "detail": "grace=True"
+    },
+    {
+      "section": "Articulations",
+      "id": "staccato",
+      "label": "·",
+      "ok": true,
+      "detail": "mark present: staccato"
+    },
+    {
+      "section": "Articulations",
+      "id": "staccatissimo",
+      "label": "·|",
+      "ok": true,
+      "detail": "mark present: staccatissimo"
+    },
+    {
+      "section": "Articulations",
+      "id": "accent",
+      "label": ">",
+      "ok": true,
+      "detail": "mark present: accent"
+    },
+    {
+      "section": "Articulations",
+      "id": "marcato",
+      "label": "^",
+      "ok": true,
+      "detail": "mark present: marcato"
+    },
+    {
+      "section": "Articulations",
+      "id": "tenuto",
+      "label": "–",
+      "ok": true,
+      "detail": "mark present: tenuto"
+    },
+    {
+      "section": "Articulations",
+      "id": "portato",
+      "label": "–·",
+      "ok": true,
+      "detail": "mark present: portato"
+    },
+    {
+      "section": "Articulations",
+      "id": "fermata",
+      "label": "U",
+      "ok": true,
+      "detail": "mark present: fermata"
+    },
+    {
+      "section": "Ornaments",
+      "id": "trill",
+      "label": "tr",
+      "ok": true,
+      "detail": "mark present: trill"
+    },
+    {
+      "section": "Ornaments",
+      "id": "mordent",
+      "label": "m",
+      "ok": true,
+      "detail": "mark present: mordent"
+    },
+    {
+      "section": "Ornaments",
+      "id": "inverted_mordent",
+      "label": "inv",
+      "ok": true,
+      "detail": "mark present: inverted_mordent"
+    },
+    {
+      "section": "Ornaments",
+      "id": "turn",
+      "label": "S",
+      "ok": true,
+      "detail": "mark present: turn"
+    },
+    {
+      "section": "Breaths & pauses",
+      "id": "fermata",
+      "label": "U",
+      "ok": true,
+      "detail": "mark present: fermata"
+    },
+    {
+      "section": "Breaths & pauses",
+      "id": "breath",
+      "label": ",",
+      "ok": true,
+      "detail": "mark present: breath"
+    },
+    {
+      "section": "Breaths & pauses",
+      "id": "caesura",
+      "label": "//",
+      "ok": true,
+      "detail": "mark present: caesura"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:ppp",
+      "label": "ppp",
+      "ok": true,
+      "detail": "measure.dynamic='ppp'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:pp",
+      "label": "pp",
+      "ok": true,
+      "detail": "measure.dynamic='pp'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:p",
+      "label": "p",
+      "ok": true,
+      "detail": "measure.dynamic='p'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:mp",
+      "label": "mp",
+      "ok": true,
+      "detail": "measure.dynamic='mp'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:mf",
+      "label": "mf",
+      "ok": true,
+      "detail": "measure.dynamic='mf'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:f",
+      "label": "f",
+      "ok": true,
+      "detail": "measure.dynamic='f'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:ff",
+      "label": "ff",
+      "ok": true,
+      "detail": "measure.dynamic='ff'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:fff",
+      "label": "fff",
+      "ok": true,
+      "detail": "measure.dynamic='fff'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:fp",
+      "label": "fp",
+      "ok": true,
+      "detail": "measure.dynamic='fp'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:sf",
+      "label": "sf",
+      "ok": true,
+      "detail": "measure.dynamic='sf'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:sfz",
+      "label": "sfz",
+      "ok": true,
+      "detail": "measure.dynamic='sfz'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:sfp",
+      "label": "sfp",
+      "ok": true,
+      "detail": "measure.dynamic='sfp'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:rf",
+      "label": "rf",
+      "ok": true,
+      "detail": "measure.dynamic='rf'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:rfz",
+      "label": "rfz",
+      "ok": true,
+      "detail": "measure.dynamic='rfz'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:fz",
+      "label": "fz",
+      "ok": true,
+      "detail": "measure.dynamic='fz'"
+    },
+    {
+      "section": "Dynamics",
+      "id": "dyn:n",
+      "label": "n",
+      "ok": true,
+      "detail": "measure.dynamic='n'"
+    },
+    {
+      "section": "Hairpins",
+      "id": "crescendo",
+      "label": "<",
+      "ok": true,
+      "detail": "hairpin_start='crescendo'"
+    },
+    {
+      "section": "Hairpins",
+      "id": "diminuendo",
+      "label": ">",
+      "ok": true,
+      "detail": "hairpin_start='diminuendo'"
+    },
+    {
+      "section": "Lines",
+      "id": "tie",
+      "label": "tie",
+      "ok": true,
+      "detail": "tie_start=True tie_end=False"
+    },
+    {
+      "section": "Lines",
+      "id": "slur",
+      "label": "slur",
+      "ok": true,
+      "detail": "slur_start=True slur_end=False"
+    },
+    {
+      "section": "Lines",
+      "id": "ottava_8va",
+      "label": "8va",
+      "ok": true,
+      "detail": "mark present: ottava_8va"
+    },
+    {
+      "section": "Lines",
+      "id": "ottava_8vb",
+      "label": "8vb",
+      "ok": true,
+      "detail": "mark present: ottava_8vb"
+    },
+    {
+      "section": "Lines",
+      "id": "pedal",
+      "label": "Ped.",
+      "ok": true,
+      "detail": "mark present: pedal"
+    },
+    {
+      "section": "Lines",
+      "id": "pedal_up",
+      "label": "*",
+      "ok": true,
+      "detail": "mark present: pedal_up"
+    },
+    {
+      "section": "Lines",
+      "id": "glissando",
+      "label": "gliss",
+      "ok": true,
+      "detail": "mark present: glissando"
+    },
+    {
+      "section": "Arpeggios & glissandi",
+      "id": "arpeggio",
+      "label": "arp",
+      "ok": true,
+      "detail": "mark present: arpeggio"
+    },
+    {
+      "section": "Arpeggios & glissandi",
+      "id": "glissando",
+      "label": "gliss",
+      "ok": true,
+      "detail": "mark present: glissando"
+    },
+    {
+      "section": "Tremolos",
+      "id": "tremolo",
+      "label": "trem",
+      "ok": true,
+      "detail": "mark present: tremolo"
+    },
+    {
+      "section": "Tremolos",
+      "id": "tremolo2",
+      "label": "trem2",
+      "ok": true,
+      "detail": "mark present: tremolo2"
+    },
+    {
+      "section": "Fingering",
+      "id": "finger:1",
+      "label": "1",
+      "ok": true,
+      "detail": "mark present: finger:1"
+    },
+    {
+      "section": "Fingering",
+      "id": "finger:2",
+      "label": "2",
+      "ok": true,
+      "detail": "mark present: finger:2"
+    },
+    {
+      "section": "Fingering",
+      "id": "finger:3",
+      "label": "3",
+      "ok": true,
+      "detail": "mark present: finger:3"
+    },
+    {
+      "section": "Fingering",
+      "id": "finger:4",
+      "label": "4",
+      "ok": true,
+      "detail": "mark present: finger:4"
+    },
+    {
+      "section": "Fingering",
+      "id": "finger:5",
+      "label": "5",
+      "ok": true,
+      "detail": "mark present: finger:5"
+    },
+    {
+      "section": "Voltas",
+      "id": "volta:1",
+      "label": "1.",
+      "ok": true,
+      "detail": "volta='1'"
+    },
+    {
+      "section": "Voltas",
+      "id": "volta:2",
+      "label": "2.",
+      "ok": true,
+      "detail": "volta='2'"
+    },
+    {
+      "section": "Voltas",
+      "id": "volta:1,2",
+      "label": "1,2",
+      "ok": true,
+      "detail": "volta='1,2'"
+    },
+    {
+      "section": "Voltas",
+      "id": "volta:",
+      "label": "×",
+      "ok": true,
+      "detail": "volta=None"
+    },
+    {
+      "section": "Barlines",
+      "id": "bar:regular",
+      "label": "|",
+      "ok": true,
+      "detail": "left=None right=None"
+    },
+    {
+      "section": "Barlines",
+      "id": "bar:double",
+      "label": "||",
+      "ok": true,
+      "detail": "left=None right=double"
+    },
+    {
+      "section": "Barlines",
+      "id": "bar:final",
+      "label": "|]",
+      "ok": true,
+      "detail": "left=None right=final"
+    },
+    {
+      "section": "Barlines",
+      "id": "bar:dashed",
+      "label": "·|·",
+      "ok": true,
+      "detail": "left=None right=dashed"
+    },
+    {
+      "section": "Barlines",
+      "id": "bar:repeat_start",
+      "label": "|:",
+      "ok": true,
+      "detail": "left=repeat_start right=dashed"
+    },
+    {
+      "section": "Barlines",
+      "id": "bar:repeat_end",
+      "label": ":|",
+      "ok": true,
+      "detail": "left=repeat_start right=repeat_end"
+    },
+    {
+      "section": "Tuplets",
+      "id": "tuplet3",
+      "label": "3",
+      "ok": true,
+      "detail": "tuplet=(3, 2)"
+    },
+    {
+      "section": "Tuplets",
+      "id": "tuplet5",
+      "label": "5",
+      "ok": true,
+      "detail": "tuplet=(5, 4)"
+    },
+    {
+      "section": "Tuplets",
+      "id": "tuplet6",
+      "label": "6",
+      "ok": true,
+      "detail": "tuplet=(6, 5)"
+    },
+    {
+      "section": "Tuplets",
+      "id": "tuplet7",
+      "label": "7",
+      "ok": true,
+      "detail": "tuplet=(7, 6)"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:Largo",
+      "label": "Largo",
+      "ok": true,
+      "detail": "tempo_mark='Largo'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:Adagio",
+      "label": "Adagio",
+      "ok": true,
+      "detail": "tempo_mark='Adagio'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:Andante",
+      "label": "Andante",
+      "ok": true,
+      "detail": "tempo_mark='Andante'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:Moderato",
+      "label": "Moderato",
+      "ok": true,
+      "detail": "tempo_mark='Moderato'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:Allegro",
+      "label": "Allegro",
+      "ok": true,
+      "detail": "tempo_mark='Allegro'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:Presto",
+      "label": "Presto",
+      "ok": true,
+      "detail": "tempo_mark='Presto'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:Rit.",
+      "label": "Rit.",
+      "ok": true,
+      "detail": "tempo_mark='Rit.'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:accel.",
+      "label": "accel.",
+      "ok": true,
+      "detail": "tempo_mark='accel.'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo:a tempo",
+      "label": "a tempo",
+      "ok": true,
+      "detail": "tempo_mark='a tempo'"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo_bpm:120",
+      "label": "=120",
+      "ok": true,
+      "detail": "meas.bpm=120 score.tempo=120"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo_bpm:92",
+      "label": "=92",
+      "ok": true,
+      "detail": "meas.bpm=92 score.tempo=92"
+    },
+    {
+      "section": "Tempo",
+      "id": "tempo_bpm:60",
+      "label": "=60",
+      "ok": true,
+      "detail": "meas.bpm=60 score.tempo=60"
+    },
+    {
+      "section": "Repeats & jumps",
+      "id": "text:D.C.",
+      "label": "D.C.",
+      "ok": true,
+      "detail": "text='D.C.'"
+    },
+    {
+      "section": "Repeats & jumps",
+      "id": "text:D.S.",
+      "label": "D.S.",
+      "ok": true,
+      "detail": "text='D.S.'"
+    },
+    {
+      "section": "Repeats & jumps",
+      "id": "text:Fine",
+      "label": "Fine",
+      "ok": true,
+      "detail": "text='Fine'"
+    },
+    {
+      "section": "Repeats & jumps",
+      "id": "text:To Coda",
+      "label": "Coda",
+      "ok": true,
+      "detail": "text='To Coda'"
+    },
+    {
+      "section": "Repeats & jumps",
+      "id": "text:Segno",
+      "label": "Segno",
+      "ok": true,
+      "detail": "text='Segno'"
+    },
+    {
+      "section": "Repeats & jumps",
+      "id": "rehearsal:A",
+      "label": "A",
+      "ok": true,
+      "detail": "rehearsal='A'"
+    },
+    {
+      "section": "Repeats & jumps",
+      "id": "rehearsal:B",
+      "label": "B",
+      "ok": true,
+      "detail": "rehearsal='B'"
+    },
+    {
+      "section": "Repeats & jumps",
+      "id": "rehearsal:C",
+      "label": "C",
+      "ok": true,
+      "detail": "rehearsal='C'"
+    },
+    {
+      "section": "Chord symbols",
+      "id": "chord:C",
+      "label": "C",
+      "ok": true,
+      "detail": "chord='C'"
+    },
+    {
+      "section": "Chord symbols",
+      "id": "chord:Am",
+      "label": "Am",
+      "ok": true,
+      "detail": "chord='Am'"
+    },
+    {
+      "section": "Chord symbols",
+      "id": "chord:G7",
+      "label": "G7",
+      "ok": true,
+      "detail": "chord='G7'"
+    },
+    {
+      "section": "Chord symbols",
+      "id": "chord:F",
+      "label": "F",
+      "ok": true,
+      "detail": "chord='F'"
+    },
+    {
+      "section": "Chord symbols",
+      "id": "chord:Dm",
+      "label": "Dm",
+      "ok": true,
+      "detail": "chord='Dm'"
+    },
+    {
+      "section": "Chord symbols",
+      "id": "chord:Em",
+      "label": "Em",
+      "ok": true,
+      "detail": "chord='Em'"
+    },
+    {
+      "section": "Chord symbols",
+      "id": "chord:",
+      "label": "×",
+      "ok": true,
+      "detail": "chord=None"
+    },
+    {
+      "section": "Text",
+      "id": "text:dolce",
+      "label": "dolce",
+      "ok": true,
+      "detail": "text='dolce'"
+    },
+    {
+      "section": "Text",
+      "id": "text:espressivo",
+      "label": "espress.",
+      "ok": true,
+      "detail": "text='espressivo'"
+    },
+    {
+      "section": "Text",
+      "id": "text:legato",
+      "label": "legato",
+      "ok": true,
+      "detail": "text='legato'"
+    },
+    {
+      "section": "Text",
+      "id": "text:cantabile",
+      "label": "cantabile",
+      "ok": true,
+      "detail": "text='cantabile'"
+    },
+    {
+      "section": "Text",
+      "id": "text:poco a poco",
+      "label": "poco…",
+      "ok": true,
+      "detail": "text='poco a poco'"
+    },
+    {
+      "section": "Layout",
+      "id": "layout:system",
+      "label": "sys",
+      "ok": true,
+      "detail": "layout='system'"
+    },
+    {
+      "section": "Layout",
+      "id": "layout:page",
+      "label": "Pg",
+      "ok": true,
+      "detail": "layout='page'"
+    },
+    {
+      "section": "Score tools",
+      "id": "tool:add_measures",
+      "label": "+小节",
+      "ok": true,
+      "detail": "tool action wired (dialog/mutation skipped)"
+    },
+    {
+      "section": "Score tools",
+      "id": "tool:add_part",
+      "label": "+声部",
+      "ok": true,
+      "detail": "tool action wired (dialog/mutation skipped)"
+    },
+    {
+      "section": "Score tools",
+      "id": "tool:accomp",
+      "label": "配乐",
+      "ok": true,
+      "detail": "tool action wired (dialog/mutation skipped)"
+    }
+  ],
+  "shots": {
+    "window": "D:\\projects\\composerchat\\tests\\screenshots\\main_features\\06_palette_all_symbols_window.png",
+    "panel": "D:\\projects\\composerchat\\tests\\screenshots\\main_features\\06_palette_all_symbols_panel.png"
+  }
+}

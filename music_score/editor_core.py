@@ -959,7 +959,7 @@ class EditController:
                 n += 1
             self._after_change(f'{action} ×{n}' if n else '无可标音符')
             return n
-        if action == 'grace':
+        if action in ('grace', 'grace_acciac', 'grace_appog'):
             for key in keys:
                 note = self._note_at(*key)
                 if note is None or note.is_rest:
@@ -968,6 +968,18 @@ class EditController:
                 n += 1
             self._after_change(f'倚音 ×{n}' if n else '无可标音符')
             return n
+        # 八度线 / 踏板 / 滑音：记在音符 marks 上（再点一次清除）
+        mark_actions = {
+            'ottava_8va': 'ottava_8va',
+            'ottava_8vb': 'ottava_8vb',
+            'pedal': 'pedal',
+            'pedal_up': 'pedal_up',
+            'glissando': 'glissando',
+            'tremolo': 'tremolo',
+            'tremolo2': 'tremolo2',
+        }
+        if action in mark_actions:
+            return self.toggle_mark(keys, mark_actions[action])
         tuplet_m = None
         if action.startswith('tuplet') and len(action) > 6 and action[6:].isdigit():
             tuplet_m = int(action[6:])
@@ -1126,6 +1138,55 @@ class EditController:
                     staff.measures[mi].rehearsal = label
         self._after_change(f'排练号 → {len(measure_indices)} 小节')
         return len(measure_indices)
+
+    def set_volta(self, measure_indices: List[int], label: str) -> int:
+        """设置反复房子号（1. / 2. / 1,2），对齐 MuseScore Lines → Volta。"""
+        if self.score is None or not measure_indices:
+            return 0
+        self._snapshot()
+        label = (label or '').strip() or None
+        for staff in self.score.staves:
+            for mi in measure_indices:
+                if 0 <= mi < len(staff.measures):
+                    m = staff.measures[mi]
+                    m.volta = None if m.volta == label else label
+        self._after_change(f'房子号 {label or "清除"} → {len(measure_indices)} 小节')
+        return len(measure_indices)
+
+    def set_layout_break(self, measure_indices: List[int], kind: str) -> int:
+        """设置布局断点：system / page。再点一次同一项则清除。"""
+        if self.score is None or not measure_indices:
+            return 0
+        from .models import LAYOUT_BREAKS
+        kind = (kind or '').strip().lower()
+        if kind not in LAYOUT_BREAKS:
+            if self.on_status:
+                self.on_status(f'未知布局断点：{kind}')
+            return 0
+        self._snapshot()
+        for staff in self.score.staves:
+            for mi in measure_indices:
+                if 0 <= mi < len(staff.measures):
+                    m = staff.measures[mi]
+                    m.layout_break = None if m.layout_break == kind else kind
+        self._after_change(f'布局 {kind} → {len(measure_indices)} 小节')
+        return len(measure_indices)
+
+    def set_chord_symbol(self, keys: List[Tuple[int, int, int]], symbol: str) -> int:
+        """给选中音符写和弦记号（C / Am / G7 …）。空串清除。"""
+        if self.score is None or not keys:
+            return 0
+        self._snapshot()
+        symbol = (symbol or '').strip() or None
+        n = 0
+        for key in keys:
+            note = self._note_at(*key)
+            if note is None or note.is_rest:
+                continue
+            note.chord_symbol = symbol
+            n += 1
+        self._after_change(f'和弦记号 ×{n}' if n else '无可标音符')
+        return n
 
     def set_dynamics(self, measure_indices: List[int], dyn: str) -> int:
         if self.score is None:
